@@ -810,7 +810,7 @@ const WORK=[
  taxon:'Maya Angia',title:'Bio-inspired design, treated as an engineering method rather than a style',
  body:`<p>I study biomedical engineering and applications of AI/ML at Georgia Tech. This portfolio is built around one claim: <strong>bio-inspired design is a rigorous engineering method, not just a design aesthetic</strong>.</p>
 <p>Nature is the oldest and most rigorous R&amp;D lab there is, producing organisms and systems of immense capability. Yet biomimicry, the practice of borrowing form and function from it, has almost no evidence base for real-world application.</p>
-<p>Complaining about that is worth little unless I try to improve it. So half the work here instantiates biomimicry through new ideas, and the other half tries to disprove it: a meta-analysis of built bio-inspired designs measured against conventional baselines.</p>
+<p>Complaining about that is worth little unless I improve it. So half the work here instantiates biomimicry through new ideas, and the other half tries to disprove it: a meta-analysis of built bio-inspired designs measured against conventional baselines.</p>
 <p>Stress-testing the claim is the only way to prove I am qualified to act on it.</p>`,
  facts:{Programme:'BME, AI/ML minor, Georgia Tech',Experience:'WWT (current) · Abramson (current) · Bhamla · Raman · Madabhushi · Netskope',Focus:'Bio-inspired design, biosignals, medical AI',Philosophy:'Most Advanced Yet Acceptable (MAYA)<br>Beyond coincidentally sharing my name, this strategy shapes how I work: the design that wins is the most advanced one people will still accept, so adoption is the real constraint rather than capability. More in the <a href="https://www.ted.com/talks/derek_thompson_the_four_letter_code_to_selling_anything" target="_blank" rel="noopener">TED talk</a> and this <a href="https://bpspsychub.onlinelibrary.wiley.com/doi/abs/10.1348/000712603762842147" target="_blank" rel="noopener">paper</a>.'},
  links:[['CV (PDF)','docs/Maya-Angia-CV.pdf',0],['LinkedIn','https://www.linkedin.com/in/maya-angia/',0],['GitHub','https://github.com/mangia3',0]]},
@@ -912,7 +912,7 @@ const WORK=[
  links:[['Semester report (PDF)','docs/Angia-2025-Computational-Pathology-Report.pdf',0],['Madabhushi Lab','https://med.emory.edu/departments/radiology/research/research-labs/madabhushi-lab/index.html',0]]},
 
 /* ── shelf ─────────────────────────────────────────────────────── */
-{col:0,row:0,cat:'shelf',id:'media',gloss:'Worth consuming at least once',mark:'shelf',stage:'Shelf',
+{col:0,row:0,cat:'shelf',id:'media',gloss:'Worth consuming at least once in life',mark:'shelf',stage:'Shelf',
  taxon:'Miscellanea',title:'',
  body:`<div class="pshelf">
 <a href="https://www.alieward.com/ologies" target="_blank" rel="noopener"><span class="sw">Podcast</span><span><span class="st">Ologies with Alie Ward</span><span class="sr">A working specialist gets asked the questions a curious outsider would actually ask.</span></span></a>
@@ -1106,15 +1106,15 @@ const HR=86,HW=Math.sqrt(3)*HR,HVS=1.5*HR;       // hex cell
 
 const SPAN={project:[2,2],bigpaper:[2,3],paper:[1,2],lab:[2,1],note:[1,1],plaqueBig:[2,2],plaqueSat:[1,1],
             research:[2,3],expt:[1,2],shelf:[2,3],concept:[1,2],labhub:[2,2]};
-const TIER={project:'xl',bigpaper:'lg',paper:'md',lab:'md',note:'nt',plaqueBig:'tri',plaqueSat:'tris',
-            research:'sub',expt:'sub',shelf:'tris',concept:'md',labhub:'hub'};
+const TIER={project:'xl',bigpaper:'lg',paper:'md',lab:'md',note:'nt',plaqueBig:'trio',plaqueSat:'trio',
+            research:'sub',expt:'sub',shelf:'trio',concept:'md',labhub:'hub'};
 /* Two hexes of radius Ra,Rb on adjacent cells meet edge-to-edge when
    Ra+Rb = 2. So the size ladder is bounded, and MORTAR is the visible seam. */
 const MORTAR=0.05;
 /* xlp 1.28 + sat 0.67 = 1.95, so contact exactly touches about while being
    noticeably larger than a bare satellite would allow at xl 1.40 */
 const HEXR={xl:1.40,xlp:1.28,lg:1.24,md:.98,nt:1.06,sat:.67,dec:.98,
-            hub:1.05,sub:.89,tuck:.66,trio:.97,tri:1.04,tris:.90};
+            hub:1.05,sub:.89,tuck:.66,trio:.975,tri:1.04,tris:.90};
 const DEPTH={xl:40,xlp:36,lg:30,md:18,nt:20,sat:26,hub:28,sub:20,tuck:24,trio:26,tri:30,tris:24};
 const KIND={project:'Built project',bigpaper:'Paper',paper:'Paper / experiment',
             lab:'Laboratory',note:'Note',plaqueBig:'Orientation',plaqueSat:'Contact',
