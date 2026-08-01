@@ -973,7 +973,7 @@ const WORK=[
 <p>I change my pfp every day, picking whatever seems interesting or notable. The question is whether the kind of image, light or dark, plants or buildings, sharp or blurred, changes how people think about me, particularly regarding their first impressions. Almost certainly no significant effects, which makes the experimental design the interesting part rather than the answer.</p>
 <p>What I do not have is an experiment procedure that would survive scrutiny. The pictures are chosen rather than assigned, so there is no randomisation and nothing separates the image from the mood, the week, the events, or even the people that produced it. Working out what could genuinely be controlled for, and whether a parameterised stimulus set is even the right instrument, is the open problem.</p>`,
  facts:{Status:'Early idea, design not worked out',Question:'Does image style change how a person is read?',Obstacle:'Self-chosen images, so no randomisation',Expectation:'Null at any detectable effect size'},
- links:[['Profile picture archive','gallery.html',0]]},
+ links:[['Profile picture archive','/gallery.html',0]]},
 
 {col:11,row:1,cat:'paper',id:'ice-binding',gloss:'Proteins that stop ice crystals from growing',mark:'frost',stage:'Proposal',unbuilt:1,
  taxon:'Dissostichus mawsoni',title:'Ice-binding protein evaluation and a cryopreservation design proposal',
@@ -1041,8 +1041,8 @@ const WORK=[
 
 {col:7,row:0,cat:'paper',id:'period-futures',gloss:'Speculative design on a public health gap',mark:'cycle',stage:'Proposal',
  taxon:'Period Futures',title:'Investigating critical gaps in the menstrual health space',
- body:`<p><strong>Complete, with publication in preparation.</strong> I led this as president of Period Futures, under Wish4WASH and Engineers Without Borders.</p>
-<p>Eight semi-structured interviews with purposefully sampled stakeholders (entrepreneurs, educators, a sociologist, a product designer, a public health researcher, a rural activist), analysed with grounded theory into fourteen themes and consolidated into four insight statements across educational stigma, media representation, inclusivity and product regulation. Each insight was then reframed into a design opportunity, which is the speculative design move: the deliverable is a provocation rather than a recommendation.</p>
+ body:`<p><strong>Complete, with publication in preparation.</strong> This initiative was part of Period Futures, under Wish4WASH and Engineers Without Borders.</p>
+<p>Eight semi-structured interviews with purposefully sampled stakeholders (entrepreneurs, educators, a sociologist, a product designer, a public health researcher, a rural activist), analyzed with grounded theory into fourteen themes and consolidated into four insight statements across educational stigma, media representation, inclusivity and product regulation. Each insight was then reframed into a design opportunity, which is the speculative design move: the deliverable is a provocation rather than a recommendation.</p>
 <p>The regulation finding is the sharpest. FDA menstrual pad guidance has not been substantially updated since 2005 while discs, cups and absorbent underwear all entered the market, required testing does not cover long-term exposure, and only three states mandate full ingredient disclosure. The proposal that follows is to treat menstrual products as long-term exposure devices and run five to ten year cohort studies instead of short-term toxicology.</p>`,
  facts:{Method:'Human-centered and speculative design',Analysis:'Grounded theory, 14 themes to 4 insight statements',Sample:'Eight semi-structured interviews',Status:'Publication in preparation'},
  links:[['Paper (PDF)','docs/Yellanki-Angia-etal-2026-Menstrual-Health-Speculative-Design.pdf',0]]},
@@ -1106,7 +1106,7 @@ const HR=86,HW=Math.sqrt(3)*HR,HVS=1.5*HR;       // hex cell
 
 const SPAN={project:[2,2],bigpaper:[2,3],paper:[1,2],lab:[2,1],note:[1,1],plaqueBig:[2,2],plaqueSat:[1,1],
             research:[2,3],expt:[1,2],shelf:[2,3],concept:[1,2],labhub:[2,2]};
-const TIER={project:'xl',bigpaper:'lg',paper:'md',lab:'md',note:'nt',plaqueBig:'trio',plaqueSat:'trio',
+const TIER={project:'xl',bigpaper:'lg',paper:'md',lab:'md',note:'nt',plaqueBig:'xl',plaqueSat:'trio',
             research:'sub',expt:'sub',shelf:'trio',concept:'md',labhub:'hub'};
 /* Two hexes of radius Ra,Rb on adjacent cells meet edge-to-edge when
    Ra+Rb = 2. So the size ladder is bounded, and MORTAR is the visible seam. */
@@ -1115,6 +1115,12 @@ const MORTAR=0.05;
    noticeably larger than a bare satellite would allow at xl 1.40 */
 const HEXR={xl:1.40,xlp:1.28,lg:1.24,md:.98,nt:1.06,sat:.67,dec:.98,
             hub:1.05,sub:.89,tuck:.66,trio:.975,tri:1.04,tris:.90};
+/* Fine positioning tweaks for specific hero tiles in hex mode.
+  Keeps the About-contact-media cluster touching without overlap. */
+const HEX_OFFSET={
+  contact:{x:-33,y:19},
+  media:{x:-38,y:19}
+};
 const DEPTH={xl:40,xlp:36,lg:30,md:18,nt:20,sat:26,hub:28,sub:20,tuck:24,trio:26,tri:30,tris:24};
 const KIND={project:'Built project',bigpaper:'Paper',paper:'Paper / experiment',
             lab:'Laboratory',note:'Note',plaqueBig:'Orientation',plaqueSat:'Contact',
@@ -1249,6 +1255,10 @@ function mkTile(box,cls,tier,html){
 WORK.forEach(w=>{
   const tier=TIER[w.cat];
   const box=boxFor({col:w.col,row:w.row,span:SPAN[w.cat]},tier);
+  if(MODE==='hex' && HEX_OFFSET[w.id]){
+    box.x += HEX_OFFSET[w.id].x;
+    box.y += HEX_OFFSET[w.id].y;
+  }
   const plaque=w.cat.startsWith('plaque');
   const body=
     `<div class="halo"></div>`+

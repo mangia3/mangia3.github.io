@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>365 — Maya Angia</title>
+<title>Profile Picture Archive 2025</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=IBM+Plex+Mono:wght@400;500&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
@@ -19,24 +19,13 @@
 html,body{margin:0;background:var(--void);color:var(--face);font-family:var(--body)}
 body{background:radial-gradient(120% 100% at 50% 0%,#1E1913,#0A0806 60%)}
 
-header{padding:56px 24px 28px;text-align:center}
-header a.back{position:fixed;top:20px;left:22px;font-family:var(--mono);font-size:10px;
+a.back{position:fixed;top:20px;left:22px;font-family:var(--mono);font-size:10px;
   letter-spacing:.16em;text-transform:uppercase;color:var(--face-dim);text-decoration:none;
   border:1px solid rgba(140,168,106,.3);padding:7px 11px;transition:color .2s,border-color .2s}
-header a.back:hover{color:var(--glow);border-color:var(--glow)}
-h1{font-family:var(--disp);font-variation-settings:'SOFT' 40,'WONK' 1,'opsz' 90;
-  font-size:clamp(32px,7vw,52px);font-weight:560;margin:0 0 8px;color:var(--face)}
-header p{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--glow);margin:0}
-#status{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--face-dim);
-  margin-top:14px;min-height:14px}
+a.back:hover{color:var(--glow);border-color:var(--glow)}
 
-main{max-width:1400px;margin:0 auto;padding:0 16px 80px}
+main{max-width:1400px;margin:0 auto;padding:64px 16px 80px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px}
-.divider{grid-column:1/-1;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--glow-deep);padding:22px 2px 8px;
-  border-bottom:1px solid rgba(140,168,106,.18)}
-.divider:first-of-type{padding-top:2px}
 figure{margin:0;position:relative;aspect-ratio:1;overflow:hidden;background:#141009;cursor:pointer}
 figure img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;
   transition:opacity .5s ease,transform .35s ease}
@@ -64,11 +53,6 @@ figure:hover img{transform:scale(1.045)}
 </head>
 <body>
 <a class="back" href="index.html">← back</a>
-<header>
-  <h1>365</h1>
-  <p>a photo a day</p>
-  <div id="status">loading…</div>
-</header>
 <main><div class="grid" id="grid"></div></main>
 
 <div id="lb">
@@ -80,15 +64,15 @@ figure:hover img{transform:scale(1.045)}
 </div>
 
 <script>
-/* ── CONFIGURE THESE THREE LINES ── */
+/* ── CONFIGURE THESE LINES ── */
 const OWNER  = 'mangia3';
 const REPO   = 'mangia3.github.io';
 const BRANCH = 'main';
 const FOLDER = 'photos';
+const MANIFEST = `${FOLDER}/manifest.json`;
 /* ───────────────────────────────── */
 
 const grid = document.getElementById('grid');
-const statusEl = document.getElementById('status');
 
 function parseName(name){
   // IMG_20250101_224817_932.webp -> {ts, label}
@@ -103,30 +87,57 @@ function parseName(name){
 
 let photos = [];
 
+function toPhotoEntry(name, url){
+  const meta = parseName(name);
+  return {name, url, ...meta};
+}
+
+async function loadFromManifest(){
+  const res = await fetch(MANIFEST, {cache:'no-store'});
+  if(!res.ok) throw new Error('manifest-missing');
+
+  const names = await res.json();
+  if(!Array.isArray(names)) throw new Error('manifest-invalid');
+
+  return names
+    .filter(name => /\.(webp|jpe?g|png)$/i.test(name))
+    .map(name => toPhotoEntry(name, `${FOLDER}/${encodeURIComponent(name)}`));
+}
+
+async function loadFromGitHubApi(){
+  const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}?ref=${BRANCH}`);
+  if(!res.ok){
+    if(res.status===403) throw new Error('rate-limited');
+    throw new Error('fetch-failed');
+  }
+
+  const data = await res.json();
+  return data
+    .filter(f=>f.type==='file' && /\.(webp|jpe?g|png)$/i.test(f.name))
+    .map(f=>toPhotoEntry(f.name, f.download_url));
+}
+
 async function load(){
   try{
-    const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}?ref=${BRANCH}`);
-    if(!res.ok){
-      if(res.status===403) throw new Error('rate-limited');
-      throw new Error('fetch-failed');
+    let loadedPhotos = [];
+    try{
+      loadedPhotos = await loadFromManifest();
+    }catch(_manifestErr){
+      loadedPhotos = await loadFromGitHubApi();
     }
-    const data = await res.json();
-    const files = data.filter(f=>f.type==='file' && /\.(webp|jpe?g|png)$/i.test(f.name));
-    if(!files.length){
-      statusEl.textContent='';
+
+    if(!loadedPhotos.length){
       grid.innerHTML = `<div id="empty">No photos in /${FOLDER} yet.</div>`;
       return;
     }
-    photos = files.map(f=>{
-      const meta = parseName(f.name);
-      return {name:f.name, url:f.download_url, ...meta};
-    }).sort((a,b)=>{
+
+    photos = loadedPhotos.sort((a,b)=>{
       if(a.ts!=null && b.ts!=null) return a.ts - b.ts;
-      return a.name.localeCompare(b.name); // falls back to plain string sort — still chronological
+      return a.name.localeCompare(b.name);
     });
+
     render();
   }catch(err){
-    statusEl.textContent='';
     const folderUrl = `https://github.com/${OWNER}/${REPO}/tree/${BRANCH}/${FOLDER}`;
     const msg = err.message==='rate-limited'
       ? `GitHub's API rate limit was hit. Wait a bit and reload, or browse the folder directly:`
@@ -136,17 +147,9 @@ async function load(){
 }
 
 function render(){
-  statusEl.textContent = `${photos.length} photos`;
+  grid.innerHTML = '';
   const frag = document.createDocumentFragment();
-  let lastDay = null;
   photos.forEach((p,i)=>{
-    if(p.dayKey && p.dayKey!==lastDay){
-      lastDay = p.dayKey;
-      const div = document.createElement('div');
-      div.className='divider';
-      div.textContent = p.dayLabel;
-      frag.appendChild(div);
-    }
     const fig = document.createElement('figure');
     fig.dataset.i = i;
     const img = document.createElement('img');
