@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>365 — Maya Angia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=IBM+Plex+Mono:wght@400;500&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#0A0806; --face:#DED6C2; --face-dim:#9C9481;
+  --glow:#8CA86A; --glow-deep:#5E7A48;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --disp:'Fraunces',Georgia,serif;
+  --body:'Archivo',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--void);color:var(--face);font-family:var(--body)}
+body{background:radial-gradient(120% 100% at 50% 0%,#1E1913,#0A0806 60%)}
+
+header{padding:56px 24px 28px;text-align:center}
+header a.back{position:fixed;top:20px;left:22px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--face-dim);text-decoration:none;
+  border:1px solid rgba(140,168,106,.3);padding:7px 11px;transition:color .2s,border-color .2s}
+header a.back:hover{color:var(--glow);border-color:var(--glow)}
+h1{font-family:var(--disp);font-variation-settings:'SOFT' 40,'WONK' 1,'opsz' 90;
+  font-size:clamp(32px,7vw,52px);font-weight:560;margin:0 0 8px;color:var(--face)}
+header p{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--glow);margin:0}
+#status{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--face-dim);
+  margin-top:14px;min-height:14px}
+
+main{max-width:1400px;margin:0 auto;padding:0 16px 80px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px}
+.divider{grid-column:1/-1;font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--glow-deep);padding:22px 2px 8px;
+  border-bottom:1px solid rgba(140,168,106,.18)}
+.divider:first-of-type{padding-top:2px}
+figure{margin:0;position:relative;aspect-ratio:1;overflow:hidden;background:#141009;cursor:pointer}
+figure img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;
+  transition:opacity .5s ease,transform .35s ease}
+figure img.loaded{opacity:1}
+figure:hover img{transform:scale(1.045)}
+
+#empty,#error{font-family:var(--mono);font-size:12px;color:var(--face-dim);text-align:center;
+  padding:60px 20px;line-height:1.7}
+#error a{color:var(--glow)}
+
+#lb{position:fixed;inset:0;background:rgba(6,4,2,.94);z-index:50;display:none;
+  align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+#lb.on{display:flex}
+#lb img{max-width:90vw;max-height:82vh;object-fit:contain;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+#lb .cap{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-family:var(--mono);
+  font-size:10.5px;letter-spacing:.12em;color:var(--face-dim)}
+#lb button{position:absolute;background:none;border:none;color:var(--face);cursor:pointer;
+  font-family:var(--mono);font-size:22px;padding:16px;opacity:.6;transition:opacity .2s}
+#lb button:hover{opacity:1}
+#lb .close{top:14px;right:18px;font-size:16px}
+#lb .prev{left:6px;top:50%;transform:translateY(-50%)}
+#lb .next{right:6px;top:50%;transform:translateY(-50%)}
+@media (max-width:600px){#lb .prev,#lb .next{padding:10px}}
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← back</a>
+<header>
+  <h1>365</h1>
+  <p>a photo a day</p>
+  <div id="status">loading…</div>
+</header>
+<main><div class="grid" id="grid"></div></main>
+
+<div id="lb">
+  <button class="close" aria-label="Close">✕</button>
+  <button class="prev" aria-label="Previous">‹</button>
+  <img id="lbimg" alt="">
+  <button class="next" aria-label="Next">›</button>
+  <div class="cap" id="lbcap"></div>
+</div>
+
+<script>
+/* ── CONFIGURE THESE THREE LINES ── */
+const OWNER  = 'mangia3';
+const REPO   = 'mangia3.github.io';
+const BRANCH = 'main';
+const FOLDER = 'pictures';
+/* ───────────────────────────────── */
+
+const grid = document.getElementById('grid');
+const statusEl = document.getElementById('status');
+
+function parseName(name){
+  // IMG_20250101_224817_932.webp -> {ts, label}
+  const m = name.match(/^IMG_(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})(\d{2})/);
+  if(!m) return {ts:null, label:name};
+  const [ , y, mo, d, hh, mm, ss ] = m;
+  const date = new Date(+y, +mo-1, +d, +hh, +mm, +ss);
+  const dayLabel = date.toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'});
+  const timeLabel = date.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+  return {ts:date.getTime(), dayKey:`${y}-${mo}-${d}`, dayLabel, timeLabel};
+}
+
+let photos = [];
+
+async function load(){
+  try{
+    const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}?ref=${BRANCH}`);
+    if(!res.ok){
+      if(res.status===403) throw new Error('rate-limited');
+      throw new Error('fetch-failed');
+    }
+    const data = await res.json();
+    const files = data.filter(f=>f.type==='file' && /\.(webp|jpe?g|png)$/i.test(f.name));
+    if(!files.length){
+      statusEl.textContent='';
+      grid.innerHTML = `<div id="empty">No photos in /${FOLDER} yet.</div>`;
+      return;
+    }
+    photos = files.map(f=>{
+      const meta = parseName(f.name);
+      return {name:f.name, url:f.download_url, ...meta};
+    }).sort((a,b)=>{
+      if(a.ts!=null && b.ts!=null) return a.ts - b.ts;
+      return a.name.localeCompare(b.name); // falls back to plain string sort — still chronological
+    });
+    render();
+  }catch(err){
+    statusEl.textContent='';
+    const folderUrl = `https://github.com/${OWNER}/${REPO}/tree/${BRANCH}/${FOLDER}`;
+    const msg = err.message==='rate-limited'
+      ? `GitHub's API rate limit was hit. Wait a bit and reload, or browse the folder directly:`
+      : `Couldn't load the gallery automatically. Browse the folder directly:`;
+    grid.innerHTML = `<div id="error">${msg}<br><a href="${folderUrl}" target="_blank" rel="noopener">${folderUrl}</a></div>`;
+  }
+}
+
+function render(){
+  statusEl.textContent = `${photos.length} photos`;
+  const frag = document.createDocumentFragment();
+  let lastDay = null;
+  photos.forEach((p,i)=>{
+    if(p.dayKey && p.dayKey!==lastDay){
+      lastDay = p.dayKey;
+      const div = document.createElement('div');
+      div.className='divider';
+      div.textContent = p.dayLabel;
+      frag.appendChild(div);
+    }
+    const fig = document.createElement('figure');
+    fig.dataset.i = i;
+    const img = document.createElement('img');
+    img.src = p.url;
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.alt = p.dayLabel ? `Photo from ${p.dayLabel}` : p.name;
+    img.addEventListener('load', ()=>img.classList.add('loaded'));
+    fig.appendChild(img);
+    fig.addEventListener('click', ()=>openLB(i));
+    frag.appendChild(fig);
+  });
+  grid.appendChild(frag);
+}
+
+/* ── lightbox ── */
+const lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbcap = document.getElementById('lbcap');
+let cur = 0;
+function openLB(i){
+  cur = i; updateLB(); lb.classList.add('on');
+}
+function updateLB(){
+  const p = photos[cur];
+  lbimg.src = p.url; lbimg.alt = p.dayLabel || p.name;
+  lbcap.textContent = p.dayLabel ? `${p.dayLabel} · ${p.timeLabel}` : p.name;
+}
+function closeLB(){ lb.classList.remove('on'); }
+function step(d){ cur = (cur + d + photos.length) % photos.length; updateLB(); }
+document.querySelector('#lb .close').onclick = closeLB;
+document.querySelector('#lb .prev').onclick = ()=>step(-1);
+document.querySelector('#lb .next').onclick = ()=>step(1);
+lb.addEventListener('click', e=>{ if(e.target===lb) closeLB(); });
+addEventListener('keydown', e=>{
+  if(!lb.classList.contains('on')) return;
+  if(e.key==='Escape') closeLB();
+  if(e.key==='ArrowLeft') step(-1);
+  if(e.key==='ArrowRight') step(1);
+});
+
+load();
+</script>
+</body>
+</html>
