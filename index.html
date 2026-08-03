@@ -186,6 +186,13 @@ body{font-family:var(--body);color:var(--face);-webkit-font-smoothing:antialiase
 .plinks a:hover{background:#181405;color:#DED6C2}
 .plinks a.todo{border-style:dashed;opacity:.48}
 .plinks a.todo::after{content:' ↯';font-size:9px}
+.plinks a.copyEmail{cursor:pointer}
+.copyToast{display:inline-flex;align-items:center;margin-left:7px;padding:3px 9px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--glow-deep);color:#F2ECDC;border-radius:2px;
+  opacity:0;transform:translateY(2px);transition:opacity .25s ease,transform .25s ease;
+  pointer-events:none;vertical-align:middle}
+.copyToast.show{opacity:1;transform:translateY(0)}
 @media (prefers-reduced-motion:reduce){#hint,#sig,#legend{animation:none;opacity:1}#motes{display:none}}
 /* ═══ RECT MODE: shape encodes category ═══════════════════════════ */
 body.rect .t{border-radius:0}
@@ -1780,6 +1787,18 @@ function focusTile(id){
   ty=Math.max(b.minY,Math.min(b.maxY,innerHeight/2-(+t.dataset.cy)));
   vx=vy=0;relight=true;
 }
+
+function showCopiedToast(anchorEl){
+  const old=anchorEl.nextElementSibling;
+  if(old&&old.classList.contains('copyToast')) old.remove();
+  const toast=document.createElement('span');
+  toast.className='copyToast';
+  toast.textContent='email address copied';
+  anchorEl.insertAdjacentElement('afterend',toast);
+  requestAnimationFrame(()=>toast.classList.add('show'));
+  setTimeout(()=>{ toast.classList.remove('show'); setTimeout(()=>toast.remove(),300); },1400);
+}
+  
 function openPanel(id,skipHash){
   const w=WORK.find(x=>x.id===id);if(!w)return;
   lastFocus=document.activeElement;
@@ -1793,10 +1812,28 @@ function openPanel(id,skipHash){
     (w.title?`<h3 class="ptitle">${w.title}</h3>`:'')+
     `<div class="pbody">${w.body}</div>`+
     (Object.keys(w.facts).length?`<div class="pfacts"><dl>${Object.entries(w.facts).map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl></div>`:'')+
-    `<div class="plinks">${w.links.map(([l,h,td])=>
-      `<a href="${h}"${h!=='#'?' target="_blank" rel="noopener"':''} class="${td?'todo':''}">${l}</a>`).join('')}</div>`;
+    `<div class="plinks">${w.links.map(([l,h,td])=>{
+          if(h.startsWith('mailto:')){
+            const email=h.slice(7);
+            return `<a href="#" class="copyEmail${td?' todo':''}" data-email="${email}">${l}</a>`;
+          }
+          return `<a href="${h}"${h!=='#'?' target="_blank" rel="noopener"':''} class="${td?'todo':''}">${l}</a>`;
+        }).join('')}</div>`;
   scrim.classList.add('on');panel.classList.add('on');panelOpen=true;
   document.getElementById('pclose').onclick=closePanel;
+  pin.querySelectorAll('.copyEmail').forEach(el=>{
+    el.addEventListener('click',e=>{
+      e.preventDefault();
+      const email=el.dataset.email;
+      navigator.clipboard.writeText(email).then(()=>showCopiedToast(el)).catch(()=>{
+        const ta=document.createElement('textarea');
+        ta.value=email;ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();
+        document.execCommand('copy');ta.remove();
+        showCopiedToast(el);
+      });
+    });
+  });
   panel.scrollTop=0;panel.focus?.();
 }
 function closePanel(){
