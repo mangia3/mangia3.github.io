@@ -92,6 +92,16 @@ body{font-family:var(--body);color:var(--face);-webkit-font-smoothing:antialiase
   background:radial-gradient(circle at 40% 40%,var(--moss-lit) 0%,var(--moss) 34%,
              rgba(74,92,56,.4) 58%,transparent 84%)}
 
+/* Living tiles cast their shadow from a dedicated blurred element instead of
+   a drop-shadow filter: the lamp parallax only moves the shadow, and moving a
+   transform is compositor work, while rewriting a filter string re-ran a
+   30-60px Gaussian blur on every one of these tiles every panned frame.
+   The blur (static, depth-based) is set once inline; only transform changes. */
+.tsh{position:absolute;inset:0;pointer-events:none}
+.tsh .tshc{position:absolute;inset:0;background:rgba(6,4,2,.8)}
+body.hex .tsh .tshc{clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)}
+body.rect .nt .tsh .tshc{border-radius:50%}
+
 /* the light each living tile throws on the wall */
 .halo{position:absolute;left:50%;top:50%;pointer-events:none;
   width:330%;height:330%;transform:translate(-50%,-50%) translateZ(-16px);
@@ -131,7 +141,14 @@ body{font-family:var(--body);color:var(--face);-webkit-font-smoothing:antialiase
 
 #flora{position:absolute;top:0;left:0;pointer-events:none;transform-style:preserve-3d;transform:translateZ(54px)}
 .plant{position:absolute;transform-style:preserve-3d}
-.plant svg{overflow:visible;display:block;filter:drop-shadow(6px 10px 6px rgba(0,0,0,.5))}
+.plant svg{overflow:visible;display:block}
+/* The shadow is a separate silhouette clone rather than a drop-shadow filter
+   on the swaying svg: a filter would re-run its Gaussian blur on every joint
+   write, and the clone can be updated at a fraction of the sway rate without
+   the difference being visible in a soft blurred shape.
+   brightness(0) opacity(.5) blur(3px) at offset (6,10) is the exact
+   equivalent of the old drop-shadow(6px 10px 6px rgba(0,0,0,.5)). */
+.plant svg.psh{filter:brightness(0) opacity(.5) blur(3px);transform:translate(6px,10px)}
 
 #hint{position:fixed;left:50%;bottom:32px;transform:translateX(-50%);z-index:40;pointer-events:none;
   font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;
@@ -150,8 +167,8 @@ body{font-family:var(--body);color:var(--face);-webkit-font-smoothing:antialiase
 #legend b{color:rgba(168,190,126,.72);font-weight:400}
 
 #scrim{position:fixed;inset:0;z-index:50;background:radial-gradient(120% 100% at 58% 22%,rgba(14,10,6,.86),rgba(5,4,2,.96));
-  backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .46s}
-#scrim.on{opacity:1;pointer-events:auto}
+  backdrop-filter:blur(8px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .46s,visibility .46s}
+#scrim.on{opacity:1;visibility:visible;pointer-events:auto}
 #panel{position:fixed;z-index:51;left:50%;top:50%;width:min(740px,92vw);max-height:86vh;
   transform:translate(-50%,-50%) scale(.92);opacity:0;pointer-events:none;
   transition:transform .54s cubic-bezier(.18,.92,.24,1),opacity .36s;
@@ -1280,7 +1297,12 @@ WORK.forEach(w=>{
   t.setAttribute('aria-label',`${w.id} — ${w.gloss}. ${KIND[w.cat]}.`);
   const d=DEPTH[tier];
   t.style.transform=`translateZ(${d}px)`;
-  SHADOW.push({el:t,depth:d});
+  const sh=document.createElement('div');
+  sh.className='tsh';
+  sh.innerHTML='<div class="tshc"></div>';
+  sh.style.filter=`blur(${((d*1.2+9)/2).toFixed(1)}px)`;   // drop-shadow radius r ≡ blur(r/2)
+  t.insertBefore(sh,t.firstChild);
+  SHADOW.push({el:t,sh,depth:d});
   LIVE.push({x:box.x,y:box.y,w:box.w,h:box.h});
 });
 
@@ -1364,7 +1386,10 @@ for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
    consistent size without hand-tuning thirty generators. One layout pass at
    build, nothing per frame. */
 (function fitPrints(){
-  let fixed=0;
+  /* All getBBox reads happen before any viewBox write: interleaving them
+     forced a full-document reflow per print, which was most of the load
+     freeze. Batched, the browser lays out once for the whole pass. */
+  const fits=[];
   document.querySelectorAll('.print svg').forEach(svg=>{
     let mnx=1e9,mxx=-1e9,mny=1e9,mxy=-1e9,n=0;
     svg.querySelectorAll('path,circle,ellipse,rect').forEach(g=>{
@@ -1375,11 +1400,11 @@ for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
     });
     if(!n||mxx<=mnx) return;
     const w=mxx-mnx, hh=mxy-mny, m=Math.max(w,hh), pad=m*0.07;
-    svg.setAttribute('viewBox',
-      `${(mnx-(m-w)/2-pad).toFixed(1)} ${(mny-(m-hh)/2-pad).toFixed(1)} ${(m+pad*2).toFixed(1)} ${(m+pad*2).toFixed(1)}`);
-    fixed++;
+    fits.push([svg,
+      `${(mnx-(m-w)/2-pad).toFixed(1)} ${(mny-(m-hh)/2-pad).toFixed(1)} ${(m+pad*2).toFixed(1)} ${(m+pad*2).toFixed(1)}`]);
   });
-  return fixed;
+  fits.forEach(([svg,vb])=>svg.setAttribute('viewBox',vb));
+  return fits.length;
 })();
 
 /* ── no 4x4 window of cells may be pure background ───────────────── */
@@ -1520,14 +1545,20 @@ function makePlant(x,y,type,scale){
     body+=`<g class="ch" data-i="${i}" transform="translate(${f1(c.ox)},${f1(c.oy)})">`+
           `<g class="jt" transform="rotate(${f1(c.lean||0)})">${c.html}</g></g>`;
   });
-  holder.innerHTML=`<svg width="${(padX*2).toFixed(0)}" height="${(padY+120).toFixed(0)}"
+  /* Two copies of the same geometry: the shadow clone (behind, silhouetted
+     and blurred by CSS) and the plant itself. The clone's joints are driven
+     from the same solver, just at a lower write rate. */
+  const svgTag=`<svg width="${(padX*2).toFixed(0)}" height="${(padY+120).toFixed(0)}"
     viewBox="${-padX} ${-100} ${padX*2} ${padY+120}"
-    style="position:absolute;left:${(-padX).toFixed(0)}px;top:-100px">${body}</svg>`;
+    style="position:absolute;left:${(-padX).toFixed(0)}px;top:-100px"`;
+  holder.innerHTML=`${svgTag} class="psh">${body}</svg>${svgTag}>${body}</svg>`;
   floraEl.appendChild(holder);
 
-  const built=[...holder.querySelectorAll('.ch')].map(w=>{
+  const shChains=[...holder.children[0].querySelectorAll('.ch')];
+  const built=[...holder.children[1].querySelectorAll('.ch')].map((w,wi)=>{
     const joints=[...w.querySelectorAll('.jt')];
-    return {joints,n:joints.length,segLen:0,
+    const sjoints=[...shChains[wi].querySelectorAll('.jt')];
+    return {joints,sjoints,n:joints.length,segLen:0,
       a:new Float32Array(joints.length),v:new Float32Array(joints.length),
       phase:rr(0,6.283),rate:rr(.7,1.3),stiff:rr(.015,.023),damp:.952,lean:rr(-2,2),
       segLens:joints.map((j,idx)=>{
@@ -1675,13 +1706,22 @@ ANCHORS.forEach(A=>{for(let i=0;i<15;i++)SPORES.push({
 for(let i=0;i<90;i++){const A={x:rr(0,WALL_W),y:rr(0,WALL_H),span:WALL_H*.5};
   SPORES.push({x:A.x,y:A.y,r:rr(.5,1.6),o:rr(.18,.6),ph:rr(0,6.283),
     dx:rr(-.04,.04),dy:rr(-.08,-.01),swirl:rr(.3,1.2),home:A});}
+/* One pre-rendered glow sprite scaled per spore. Halo and core keep the same
+   1 : 3.2 radius ratio and the same baked alphas as the old two arc fills;
+   globalAlpha carries the per-frame flicker, so the output is identical while
+   a frame costs one drawImage per spore instead of two path fills. */
+const SPR=(()=>{const c=document.createElement('canvas');c.width=c.height=96;
+  const g=c.getContext('2d');
+  g.fillStyle='rgba(214,196,138,.10)';g.beginPath();g.arc(48,48,48,0,6.284);g.fill();
+  g.fillStyle='rgba(240,232,198,.78)';g.beginPath();g.arc(48,48,15,0,6.284);g.fill();
+  return c;})();
 
 /* ── solver: independent damped springs, exponential damping ─────── */
 /* The arithmetic here is trivial; the cost is the SVG transform writes, each
    of which invalidates a nested subtree. So the physics always integrates —
    plants must not jump when they scroll into view — but only visible plants
    are written to the DOM, and only on alternate frames. */
-function stepPlants(now,dt,write){
+function stepPlants(now,dt,write,shWrite){
   breeze*=Math.pow(.965,dt);
   if(breeze>6)breeze=6;else if(breeze<-6)breeze=-6;
   const w=now*0.00026; let tip=0, nc=0;
@@ -1702,8 +1742,12 @@ function stepPlants(now,dt,write){
         let a=C.a[i]+v*dt;
         if(a>16)a=16;else if(a<-16)a=-16;
         C.a[i]=a;
-        if(vis) C.joints[i].setAttribute('transform',
-          `translate(0,${C.segLens[i].toFixed(1)}) rotate(${a.toFixed(2)})`);
+        if(vis){
+          const tr=`translate(0,${C.segLens[i].toFixed(1)}) rotate(${a.toFixed(2)})`;
+          C.joints[i].setAttribute('transform',tr);
+          /* the blurred shadow clone tolerates a much lower update rate */
+          if(shWrite)C.sjoints[i].setAttribute('transform',tr);
+        }
       }
       tip+=Math.abs(C.v[C.n-1]); nc++;
     }
@@ -1712,7 +1756,7 @@ function stepPlants(now,dt,write){
 }
 if(!RM){const t=performance.now();
   for(let s=0;s<400;s++)stepPlants(t+s*16.67,1,false);
-  stepPlants(t+400*16.67,1,true);}
+  stepPlants(t+400*16.67,1,true,true);}
 
 /* ── loop ───────────────────────────────────────────────────────── */
 let t0=performance.now(),frame=0,relight=true,running=true;
@@ -1720,9 +1764,14 @@ function tick(now){
   const dt=Math.min(2.2,(now-t0)/16.67);t0=now;frame++;
   if(!dragging){tx+=vx;ty+=vy;vx*=.945;vy*=.945;
     if(Math.abs(vx)<.04)vx=0;if(Math.abs(vy)<.04)vy=0;}
-  const b=bounds();
-  if(tx>b.maxX)tx+=(b.maxX-tx)*.16;if(tx<b.minX)tx+=(b.minX-tx)*.16;
-  if(ty>b.maxY)ty+=(b.maxY-ty)*.16;if(ty<b.minY)ty+=(b.minY-ty)*.16;
+  /* The edge is a hint, not a bungee: overshoot is capped low, inertia dies
+     at the boundary instead of stretching it, and the pull-back is strong
+     enough to settle in a few frames. */
+  const b=bounds(),OB=56,ke=dragging?.22:.45;
+  if(tx>b.maxX){if(!dragging)vx*=.5;tx+=(b.maxX-tx)*ke;if(tx>b.maxX+OB)tx=b.maxX+OB;}
+  else if(tx<b.minX){if(!dragging)vx*=.5;tx+=(b.minX-tx)*ke;if(tx<b.minX-OB)tx=b.minX-OB;}
+  if(ty>b.maxY){if(!dragging)vy*=.5;ty+=(b.maxY-ty)*ke;if(ty>b.maxY+OB)ty=b.maxY+OB;}
+  else if(ty<b.minY){if(!dragging)vy*=.5;ty+=(b.minY-ty)*ke;if(ty<b.minY-OB)ty=b.minY-OB;}
   const ppx=px,ppy=py;
   /* 1:1 while the finger is down — any smoothing here reads as lag.
      Easing is only for the inertial glide after release. */
@@ -1741,12 +1790,11 @@ function tick(now){
       let lx=sx-lampX,ly=sy-lampY;const d=Math.hypot(lx,ly)||1;lx/=d;ly/=d;
       const near=Math.max(0,1-d/1000);
       const ox=(kx*.72+lx*.5*near)*T.depth*.68,oy=(ky*.72+ly*.5*near)*T.depth*.68;
-      const blur=T.depth*1.2+9;
-      T.el.style.filter=`drop-shadow(${(ox*1.5).toFixed(1)}px ${(oy*1.5).toFixed(1)}px ${blur.toFixed(0)}px rgba(6,4,2,.8))`;
+      T.sh.style.transform=`translate3d(${(ox*1.5).toFixed(1)}px,${(oy*1.5).toFixed(1)}px,0)`;
     }
   }
 
-  const tipMotion=RM?0:stepPlants(now,dt,frame%2===0);
+  const tipMotion=RM?0:stepPlants(now,dt,frame%2===0,frame%6===0);
 
   if(!RM&&SPORES.length){
     mx.clearRect(0,0,mc.width,mc.height);
@@ -1762,11 +1810,11 @@ function tick(now){
       const X=s.x+px,Y=s.y+py;
       if(X<-10||X>mc.width+10||Y<-10||Y>mc.height+10)continue;
       const al=s.o*(.45+.55*Math.sin(now*.0011+s.ph));
-      mx.beginPath();mx.arc(X,Y,s.r*3.2,0,6.284);
-      mx.fillStyle=`rgba(214,196,138,${(al*.10).toFixed(3)})`;mx.fill();
-      mx.beginPath();mx.arc(X,Y,s.r,0,6.284);
-      mx.fillStyle=`rgba(240,232,198,${(al*.78).toFixed(3)})`;mx.fill();
+      const R=s.r*3.2;
+      mx.globalAlpha=al;
+      mx.drawImage(SPR,X-R,Y-R,R*2,R*2);
     }
+    mx.globalAlpha=1;
   }
   if(running)requestAnimationFrame(tick);
 }
