@@ -969,7 +969,7 @@ const WORK=[
 <p>4sight reads heart-rate variability (among other biosignals) off a hacked smartwatch and predicts windows of impaired judgment. It won a track at TreeHacks, but also has a hole in the prediction logic, which we acknowledged: there is no labelled dataset for impaired decision-making specifically, so the model was trained on stress proxies instead.</p>
 <p>That admission is the research question. The entire consumer readiness-score category rests on this same unvalidated conclusion, and no literature has audited this idea end to end with a fully transparent deployed pipeline.</p>
 <p>Plan: leave-one-subject-out re-splits, label provenance tracing, calibration curves, cross-device shift if possible (from 64 Hz lab sensors down to a 25 Hz watch), aggregation-weight sensitivity, and then finally a net-benefit analysis asking when an autonomous intervention helps more than it harms.</p>`,
- facts:{Method:'Reproducibility and construct validity audit',Inspiration:'4sight',Standard:'TRIPOD+AI · DiMe V3+',Target:'CHIL / IEEE JBHI'},
+ facts:{Method:'Reproducibility and construct validity audit',Inspiration:'4sight',Standard:'TRIPOD+AI · DiMe V3+'}, //,Target:'CHIL / IEEE JBHI'
  links:[['4sight on Devpost','https://devpost.com/software/4sight-neoslb',0],['Source code','https://github.com/kl527/4sight',0]]},
 
 {col:9,row:0,cat:'bigpaper',id:'spidroin',gloss:'Where the fold models fail at silk',mark:'silk',stage:'Proposal',unbuilt:1,
@@ -978,7 +978,7 @@ const WORK=[
 <p>Spider silk. Mussel glue. Antifreeze. Squid ring teeth. Nature's best materials run on proteins that are repetitive, disordered, hierarchically assembled, and dependent on chemical modifications the structure-prediction models cannot even represent.</p>
 <p>Every co-folding benchmark, CASP and PoseBusters and FoldBench alike, is built from globular, druggable, PDB-abundant proteins. Nobody knows whether AlphaFold 3, Boltz-2 or Chai-1 work here. Four perturbation tests would find out: repeat-length scaling, assembly-order invariance, a post-translational error ceiling, and ensemble representativeness.</p>
 <p>Then asking the question, "Does any feature derived from a predicted structure correlate with measured toughness or adhesion energy?" The expected answer is barely, but any results would show where computation is or isn't valuable.</p>`,
- facts:{Method:'Benchmark and adversarial evaluation',Models:'AF3, Boltz-2, Chai-1, Protenix, ESMFold',Scale:'~400 sequences × 5 seeds × 6 models',Target:'NeurIPS Datasets & Benchmarks'},
+ facts:{Method:'Benchmark and adversarial evaluation',Models:'AF3, Boltz-2, Chai-1, Protenix, ESMFold',Scale:'~400 sequences × 5 seeds × 6 models'}, //,Target:'NeurIPS Datasets & Benchmarks'
  links:[]},
 
 {col:13,row:0,cat:'bigpaper',id:'counterfactual',gloss:'Does biomimicry actually work?',mark:'fork',stage:'Proposal',unbuilt:1,
@@ -987,7 +987,7 @@ const WORK=[
 <p>The field I want to build a career in cannot answer its own central question. Its evidence base is case studies with no counterfactual, plus small studies rating whether students generated more out-of-the-box concepts. Unique concepts do not always make better engineering.</p>
 <p>Implement a PRISMA systematic search for every bio-inspired solution that was actually built and measured against a stated conventional baseline. Extract effect sizes. Normalise by functional class (adhesion, drag, thermal, self-healing, filtration, toughness). Random-effects synthesis with functional class as moderator.</p>
 <p>Funnel plots and Egger's test. Nobody publishes bio-inspired designs that lost, so quantifying publication bias is very valuable.</p>`,
- facts:{Method:'Systematic review and meta-analysis',Standard:'PRISMA 2020',Output:'Effect-size atlas and open database',Target:'Bioinspiration & Biomimetics'},
+ facts:{Method:'Systematic review and meta-analysis',Standard:'PRISMA 2020',Output:'Effect-size atlas and open database'}, //,Target:'Bioinspiration & Biomimetics'
  links:[]},
 
 {col:13,row:4,cat:'bigpaper',id:'profiling',gloss:'Profile pictures and perception',mark:'eye',stage:'Proposal',unbuilt:1,
@@ -1004,7 +1004,7 @@ const WORK=[
  body:`<p><strong>Proposal.</strong></p>
 <p>Antifreeze proteins bind specific ice crystal planes and stop recrystallisation. Organ cryopreservation needs exactly that. Whether current models can fold them well enough to design new ones is untested.</p>
 <p>Spins directly out of the silk benchmark's infrastructure.</p>`,
- facts:{Method:'Targeted evaluation and design proposal',Tools:'Boltz-2, ProteinMPNN, RFdiffusion',Application:'Organ and cell cryopreservation',Target:'Bioinspiration & Biomimetics'},
+ facts:{Method:'Targeted evaluation and design proposal',Tools:'Boltz-2, ProteinMPNN, RFdiffusion',Application:'Organ and cell cryopreservation'}, //,Target:'Bioinspiration & Biomimetics'
  links:[]},
 
 {col:14,row:2,cat:'paper',id:'translation',gloss:'The bio-inspired designs that failed',mark:'seed',stage:'Proposal',unbuilt:1,
@@ -1012,7 +1012,7 @@ const WORK=[
  body:`<p><strong>Proposal.</strong></p>
 <p>The literature is a survivorship-biased record of wins. The knowledge is in the losses: scale mismatch, manufacturing non-transferability, lost property gradients, multifunctionality collapse, and the most common failure of all for bio-inspired design, copying the form instead of the function.</p>
 <p>Sixty to a hundred coded case histories, one taxonomy, one diagnostic checklist.</p>`,
- facts:{Method:'Case-history coding',Sample:'60–100 translation attempts',Output:'Taxonomy and practitioner checklist',Target:'Design Studies'},
+ facts:{Method:'Case-history coding',Sample:'60–100 translation attempts',Output:'Taxonomy and practitioner checklist'}, //,Target:'Design Studies'
  links:[]},
 
 {col:11,row:3,cat:'paper',id:'stigmergy',gloss:'Coordination without MS Teams',mark:'trail',stage:'Proposal',unbuilt:1,
@@ -1020,7 +1020,7 @@ const WORK=[
  body:`<p><strong>Proposal.</strong></p>
 <p>Federated learning across hospitals assumes a star topology and a coordinating server. Ant colonies coordinate with no central node and a decaying local signal. This maps surprisingly well onto what a privacy-constrained hospital network can and should support.</p>
 <p>Implement stigmergic aggregation. Compare against FedAvg under realistic non-IID label skew.</p>`,
- facts:{Method:'Federated learning benchmark',Inspiration:'MedGraph',Output:'Paper and framework',Target:'ML4H / CHIL'},
+ facts:{Method:'Federated learning benchmark',Inspiration:'MedGraph',Output:'Paper and framework'}, //,Target:'ML4H / CHIL'
  links:[]},
 
 {col:13,row:6,cat:'paper',id:'swarm-honesty',gloss:'Metaheuristic or wolf in sheep&rsquo;s clothing?',mark:'swarm',stage:'Proposal',unbuilt:1,
@@ -1029,7 +1029,7 @@ const WORK=[
 <p>Dozens of optimisers named after animals (grey wolf, whale, firefly, bat, salp swarm), widely suspected of being hill climbing with the baselines tuned badly.</p>
 <p>Reimplement them. Race them against random search, CMA-ES and Bayesian optimisation at strictly equal evaluation budget.</p>
 <p>Biomimicry only becomes credible once someone polices the boundary between transferring a mechanism and borrowing a mascot - Simply naming something after an animal isn't bio-inspired design.</p>`,
- facts:{Method:'Controlled benchmark',Baselines:'Random search, CMA-ES, Bayesian optimisation',Output:'Paper and reproducible harness',Target:'GECCO / TELO'},
+ facts:{Method:'Controlled benchmark',Baselines:'Random search, CMA-ES, Bayesian optimisation',Output:'Paper and reproducible harness'}, //,Target:'GECCO / TELO'
  links:[]},
 
 {col:9,row:5,cat:'paper',id:'immune-anomaly',gloss:'Immune-inspired anomaly detection',mark:'pollen',stage:'Proposal',unbuilt:1,
@@ -1037,7 +1037,7 @@ const WORK=[
  body:`<p><strong>Proposal.</strong></p>
 <p>Artificial immune systems are a large literature with thin modern benchmarking. Self and non-self discrimination and clonal selection map well onto intrusion detection in security.</p>
 <p>Run against current baselines (prepared to report null results).</p>`,
- facts:{Method:'Benchmark',Risk:'Likely null, pre-declared',Target:'Workshop paper'},
+ facts:{Method:'Benchmark',Risk:'Likely null, pre-declared'}, //,Target:'Workshop paper'
  links:[]},
 
 {col:11,row:6,cat:'paper',id:'mfp-adhesion',gloss:'Underwater glue',mark:'mussel',stage:'Proposal',unbuilt:1,
@@ -1045,7 +1045,7 @@ const WORK=[
  body:`<p><strong>Proposal.</strong></p>
 <p>Mussels bond to wet rock in breaking surf using DOPA chemistry. Surgical sealants cannot manage wet tissue. Adhesion energy scaling, DOPA oxidation kinetics, wet-adhesion thermodynamics and failure-mode analysis are all calculable without a bench.</p>
 <p>Prelim literature on this implementation exists - this exercise is for exploring the physics and limitations of this idea</p>`,
- facts:{Method:'Analytical feasibility study',Content:'Calculations, kinetics, failure modes',Constraint:'No laboratory required',Target:'Acta Biomaterialia'},
+ facts:{Method:'Analytical feasibility study',Content:'Calculations, kinetics, failure modes',Constraint:'No laboratory required'}, //,Target:'Acta Biomaterialia'
  links:[]},
 
 {col:9,row:8,cat:'paper',id:'beta-cell',gloss:'Pancreatic control systems',mark:'islet',stage:'Proposal',unbuilt:1,
@@ -1053,7 +1053,7 @@ const WORK=[
  body:`<p><strong>Proposal.</strong></p>
 <p>Closed-loop drug delivery usually uses a PID or MPC controller. The pancreas uses neither and implements biphasic release: a fast stored-vesicle pulse, then a slow synthesis-limited phase.</p>
 <p>Implement that architecture as a controller. Race it against PID and MPC on a validated glucose-insulin simulator.</p>`,
- facts:{Method:'In-silico control comparison',Testbed:'Validated glucose-insulin simulator',Target:'IEEE TBME'},
+ facts:{Method:'In-silico control comparison',Testbed:'Validated glucose-insulin simulator'}, //,Target:'IEEE TBME'
  links:[]},
 
 {col:7,row:7,cat:'paper',id:'foveate',gloss:'A lot to take in',mark:'radial',stage:'Proposal',unbuilt:1,
@@ -1061,7 +1061,7 @@ const WORK=[
  body:`<p><strong>Proposal.</strong></p>
 <p>A pathology slide is a gigapixel image. Vision transformers patch it uniformly, which no eye has ever done. Foveation plus saccades matches the actual information geometry of the image.</p>
 <p>Implement a learned saccade policy - existing literature (SaccadeNet) only compares for processing speed/efficiency. Compare accuracy per unit compute against uniform patching.</p>`,
- facts:{Method:'Architecture comparison',Data:'Public whole-slide cohorts',Target:'MICCAI / MIDL'},
+ facts:{Method:'Architecture comparison',Data:'Public whole-slide cohorts'}, //,Target:'MICCAI / MIDL'
  links:[]},
 
 {col:7,row:0,cat:'paper',id:'period-futures',gloss:'Speculative design on a public health gap',mark:'cycle',stage:'Proposal',
@@ -1086,7 +1086,7 @@ const WORK=[
  body:`<p><strong>Note.</strong></p>
 <p>Feed identical PPG into NeuroKit2, HeartPy, pyHRV and a hand-rolled implementation. Compare SDNN, RMSSD, pNN50. They frequently disagree, which invalidates cross-study comparison across a very large wearable literature.</p>
 <p>Cheap to run + de-risks the feature pipeline many things depend on.</p>`,
- facts:{Method:'Reproducibility audit',Data:'WESAD, PPG-DaLiA',Output:'Note and library patch',Target:'JOSS'},
+ facts:{Method:'Reproducibility audit',Data:'WESAD, PPG-DaLiA',Output:'Note and library patch'}, //,Target:'JOSS'
  links:[]},
 
 {col:10,row:2,cat:'note',id:'plddt-cliff',gloss:'Confidence falls off a cliff somewhere',mark:'fiddle',stage:'Note',unbuilt:1,
@@ -1094,28 +1094,28 @@ const WORK=[
  body:`<p><strong>Note.</strong></p>
 <p>One question, one figure: plot pLDDT distributions across functional classes in the AlphaFold database and find the cliff edge. Structural and materials proteins are the hypothesis.</p>
 <p>Pilot for the silk benchmark.</p>`,
- facts:{Method:'Descriptive',Data:'AFDB, UniProt',Output:'Single-figure note',Target:'bioRxiv'},
+ facts:{Method:'Descriptive',Data:'AFDB, UniProt',Output:'Single-figure note'}, //,Target:'bioRxiv'
  links:[]},
 
 {col:14,row:7,cat:'note',id:'bio-analogy-eval',gloss:'Can a model find the right organism?',mark:'pair',stage:'Note',unbuilt:1,
  taxon:'Corpus AskNature',title:'Benchmarking function-to-biology analogical retrieval',
  body:`<p><strong>Note.</strong></p>
 <p>The core move in bio-inspired design is abstracting a problem into a biological function, then retrieving organisms that solve it. Score frontier models against a curated ground truth.</p>`,
- facts:{Method:'Retrieval benchmark',Data:'Curated function-organism pairs',Output:'Note and eval harness',Target:'Workshop paper'},
+ facts:{Method:'Retrieval benchmark',Data:'Curated function-organism pairs',Output:'Note and eval harness'}, //,Target:'Workshop paper'
  links:[]},
 
 {col:11,row:9,cat:'note',id:'ashby-nature',gloss:'Bio vs engineering',mark:'nautilus',stage:'Note',unbuilt:1,
  taxon:'Sequoia sempervirens',title:'Material property maps, biological against engineered',
  body:`<p><strong>Note.</strong></p>
 <p>Refresh the classic property-space maps with modern data. Biology wins on toughness per density and loses badly on stiffness and temperature. Knowing the shape of that envelope is what makes a scoping decision defensible.</p>`,
- facts:{Method:'Data synthesis',Output:'Figure set and open dataset',Use:'Scoping tool for everything here',Target:'bioRxiv'},
+ facts:{Method:'Data synthesis',Output:'Figure set and open dataset',Use:'Scoping tool for everything here'}, //,Target:'bioRxiv'
  links:[]},
 
 {col:14,row:9,cat:'note',id:'murray',gloss:'Old law, new problems',mark:'vascular',stage:'Note',unbuilt:1,
  taxon:'Quercus rubra',title:"Murray's law branching against conventional scaffold geometry",
  body:`<p><strong>Note.</strong></p>
 <p>Vascular systems minimise pumping work through a fixed radius-cubed branching relation. Tissue scaffolds and microfluidics are usually laid out by convention instead. Simulate both.</p>`,
- facts:{Method:'CFD comparison',Tools:'FEniCS / OpenFOAM',Output:'Note and geometry library',Target:'bioRxiv'},
+ facts:{Method:'CFD comparison',Tools:'FEniCS / OpenFOAM',Output:'Note and geometry library'}, //,Target:'bioRxiv'
  links:[]},
 ];
 
