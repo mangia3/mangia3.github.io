@@ -962,10 +962,10 @@ const WORK=[
  facts:{Method:'Property derivation, static FEA, material substitution',Tools:'Autodesk Fusion, linear regression on elastic region',Finding:'93 percent cortical load share; SF 5.7 healthy, near 1.0 osteoporotic',Output:'Two surrogate specifications rather than one'},
  links:[['Report (PDF)','docs/Angia-2026-Femoral-Surrogate-Composite-Design.pdf',0]]},
 
-/* ── proposals and ideas: not started ──────────────────────────── */
+/* ── proposals and ideas──────────────────────────── */
 {col:8,row:2,cat:'bigpaper',id:'allostasis',gloss:'Auditing 4sight prediction validity',mark:'heart',stage:'Proposal',unbuilt:1,
  taxon:'Nervus vagus',title:'A construct-validity audit of consumer readiness scores',
- body:`<p><strong>Proposal. Not started.</strong></p>
+ body:`<p><strong>Proposal.</strong></p>
 <p>4sight reads heart-rate variability (among other biosignals) off a hacked smartwatch and predicts windows of impaired judgment. It won a track at TreeHacks, but also has a hole in the prediction logic, which we acknowledged: there is no labelled dataset for impaired decision-making specifically, so the model was trained on stress proxies instead.</p>
 <p>That admission is the research question. The entire consumer readiness-score category rests on this same unvalidated conclusion, and no literature has audited this idea end to end with a fully transparent deployed pipeline.</p>
 <p>Plan: leave-one-subject-out re-splits, label provenance tracing, calibration curves, cross-device shift if possible (from 64 Hz lab sensors down to a 25 Hz watch), aggregation-weight sensitivity, and then finally a net-benefit analysis asking when an autonomous intervention helps more than it harms.</p>`,
@@ -974,7 +974,7 @@ const WORK=[
 
 {col:9,row:0,cat:'bigpaper',id:'spidroin',gloss:'Where the fold models fail at silk',mark:'silk',stage:'Proposal',unbuilt:1,
  taxon:'Araneus diadematus',title:'A benchmark for the proteins biomimetic materials science actually needs',
- body:`<p><strong>Proposal. Not started.</strong></p>
+ body:`<p><strong>Proposal.</strong></p>
 <p>Spider silk. Mussel glue. Antifreeze. Squid ring teeth. Nature's best materials run on proteins that are repetitive, disordered, hierarchically assembled, and dependent on chemical modifications the structure-prediction models cannot even represent.</p>
 <p>Every co-folding benchmark, CASP and PoseBusters and FoldBench alike, is built from globular, druggable, PDB-abundant proteins. Nobody knows whether AlphaFold 3, Boltz-2 or Chai-1 work here. Four perturbation tests would find out: repeat-length scaling, assembly-order invariance, a post-translational error ceiling, and ensemble representativeness.</p>
 <p>Then asking the question, "Does any feature derived from a predicted structure correlate with measured toughness or adhesion energy?" The expected answer is barely, but any results would show where computation is or isn't valuable.</p>`,
@@ -983,7 +983,7 @@ const WORK=[
 
 {col:13,row:0,cat:'bigpaper',id:'counterfactual',gloss:'Does biomimicry actually work?',mark:'fork',stage:'Proposal',unbuilt:1,
  taxon:'Papilio glaucus',title:'A matched-comparison synthesis of realized bio-inspired designs',
- body:`<p><strong>Proposal. Not started.</strong></p>
+ body:`<p><strong>Proposal.</strong></p>
 <p>The field I want to build a career in cannot answer its own central question. Its evidence base is case studies with no counterfactual, plus small studies rating whether students generated more out-of-the-box concepts. Unique concepts do not always make better engineering.</p>
 <p>Implement a PRISMA systematic search for every bio-inspired solution that was actually built and measured against a stated conventional baseline. Extract effect sizes. Normalise by functional class (adhesion, drag, thermal, self-healing, filtration, toughness). Random-effects synthesis with functional class as moderator.</p>
 <p>Funnel plots and Egger's test. Nobody publishes bio-inspired designs that lost, so quantifying publication bias is very valuable.</p>`,
@@ -995,13 +995,13 @@ const WORK=[
  body:`<p><strong>Early idea. Barely designed thought experiment.</strong></p>
 <p>Do the characteristics of a profile picture change how people percieve me?</p>
 <p>I change my insta pfp every day, picking whatever seems interesting or notable. The research question is whether the kind of image (light/dark, plants/buildings, sharp/blurred, color associations, etc...) changes how people think about me, particularly regarding their first impressions upon following my account. Almost certainly no significant effects, which makes the experimental design the interesting part rather than the answer.</p>
-<p>What I do not have yet is a robust and repeatable experiment procedure. The pictures are chosen rather than assigned, so there is no randomisation and nothing separates the image from the mood, the week, the events, or even the people that produced it. Working out what could be controlled for, and whether a parameterised stimulus set is even the right strategy, is the open problem.</p>`,
+<p>I don't yet have a repeatable experiment procedure. The pictures are chosen rather than assigned, so there is no randomization and nothing separates the image from the mood, the week, the events, or even the people that produced it. Working out what could be controlled for, and whether a parameterised stimulus set is even the right strategy, is the open problem.</p>`,
  facts:{Status:'Early idea, design not worked out',Question:'Does image style change how a person is read?',Obstacle:'Self-chosen images, so no randomisation',Expectation:'Null at any detectable effect size'},
  links:[['Profile picture archive','/gallery.html',0]]},
 
 {col:11,row:1,cat:'paper',id:'ice-binding',gloss:'Nature&rsquo;s antifreeze',mark:'frost',stage:'Proposal',unbuilt:1,
  taxon:'Dissostichus mawsoni',title:'Ice-binding protein evaluation and a cryopreservation design proposal',
- body:`<p><strong>Proposal. Not started.</strong></p>
+ body:`<p><strong>Proposal.</strong></p>
 <p>Antifreeze proteins bind specific ice crystal planes and stop recrystallisation. Organ cryopreservation needs exactly that. Whether current models can fold them well enough to design new ones is untested.</p>
 <p>Spins directly out of the silk benchmark's infrastructure.</p>`,
  facts:{Method:'Targeted evaluation and design proposal',Tools:'Boltz-2, ProteinMPNN, RFdiffusion',Application:'Organ and cell cryopreservation',Target:'Bioinspiration & Biomimetics'},
@@ -1009,7 +1009,7 @@ const WORK=[
 
 {col:14,row:2,cat:'paper',id:'translation',gloss:'The bio-inspired designs that failed',mark:'seed',stage:'Proposal',unbuilt:1,
  taxon:'Taraxacum officinale',title:'A taxonomy of why bio-inspired designs do not translate',
- body:`<p><strong>Proposal. Not started.</strong></p>
+ body:`<p><strong>Proposal.</strong></p>
 <p>The literature is a survivorship-biased record of wins. The knowledge is in the losses: scale mismatch, manufacturing non-transferability, lost property gradients, multifunctionality collapse, and the most common failure of all for bio-inspired design, copying the form instead of the function.</p>
 <p>Sixty to a hundred coded case histories, one taxonomy, one diagnostic checklist.</p>`,
  facts:{Method:'Case-history coding',Sample:'60–100 translation attempts',Output:'Taxonomy and practitioner checklist',Target:'Design Studies'},
@@ -1017,7 +1017,7 @@ const WORK=[
 
 {col:11,row:3,cat:'paper',id:'stigmergy',gloss:'Coordination without MS Teams',mark:'trail',stage:'Proposal',unbuilt:1,
  taxon:'Atta cephalotes',title:'Pheromone-trail topology against FedAvg on non-IID clinical data',
- body:`<p><strong>Proposal. Not started.</strong></p>
+ body:`<p><strong>Proposal.</strong></p>
 <p>Federated learning across hospitals assumes a star topology and a coordinating server. Ant colonies coordinate with no central node and a decaying local signal. This maps surprisingly well onto what a privacy-constrained hospital network can and should support.</p>
 <p>Implement stigmergic aggregation. Compare against FedAvg under realistic non-IID label skew.</p>`,
  facts:{Method:'Federated learning benchmark',Inspiration:'MedGraph',Output:'Paper and framework',Target:'ML4H / CHIL'},
@@ -1025,7 +1025,7 @@ const WORK=[
 
 {col:13,row:6,cat:'paper',id:'swarm-honesty',gloss:'Metaheuristic or wolf in sheep&rsquo;s clothing?',mark:'swarm',stage:'Proposal',unbuilt:1,
  taxon:'Canis lupus',title:'Nature-inspired optimizers against honest baselines at equal budget',
- body:`<p><strong>Proposal. Not started.</strong></p>
+ body:`<p><strong>Proposal.</strong></p>
 <p>Dozens of optimisers named after animals (grey wolf, whale, firefly, bat, salp swarm), widely suspected of being hill climbing with the baselines tuned badly.</p>
 <p>Reimplement them. Race them against random search, CMA-ES and Bayesian optimisation at strictly equal evaluation budget.</p>
 <p>Biomimicry only becomes credible once someone polices the boundary between transferring a mechanism and borrowing a mascot - Simply naming something after an animal isn't bio-inspired design.</p>`,
@@ -1034,7 +1034,7 @@ const WORK=[
 
 {col:9,row:5,cat:'paper',id:'immune-anomaly',gloss:'Immune-inspired anomaly detection',mark:'pollen',stage:'Proposal',unbuilt:1,
  taxon:'Lymphocytus',title:'Do immune-inspired anomaly detectors beat modern baselines?',
- body:`<p><strong>Proposal. Not started.</strong></p>
+ body:`<p><strong>Proposal.</strong></p>
 <p>Artificial immune systems are a large literature with thin modern benchmarking. Self and non-self discrimination and clonal selection map well onto intrusion detection in security.</p>
 <p>Run against current baselines (prepared to report null results).</p>`,
  facts:{Method:'Benchmark',Risk:'Likely null, pre-declared',Target:'Workshop paper'},
@@ -1042,7 +1042,7 @@ const WORK=[
 
 {col:11,row:6,cat:'paper',id:'mfp-adhesion',gloss:'Underwater glue',mark:'mussel',stage:'Proposal',unbuilt:1,
  taxon:'Mytilus edulis',title:'Computational validation of mussel-adhesive surgical sealant',
- body:`<p><strong>Proposal. Not started.</strong></p>
+ body:`<p><strong>Proposal.</strong></p>
 <p>Mussels bond to wet rock in breaking surf using DOPA chemistry. Surgical sealants cannot manage wet tissue. Adhesion energy scaling, DOPA oxidation kinetics, wet-adhesion thermodynamics and failure-mode analysis are all calculable without a bench.</p>
 <p>Prelim literature on this implementation exists - this exercise is for exploring the physics and limitations of this idea</p>`,
  facts:{Method:'Analytical feasibility study',Content:'Calculations, kinetics, failure modes',Constraint:'No laboratory required',Target:'Acta Biomaterialia'},
@@ -1050,7 +1050,7 @@ const WORK=[
 
 {col:9,row:8,cat:'paper',id:'beta-cell',gloss:'Pancreatic control systems',mark:'islet',stage:'Proposal',unbuilt:1,
  taxon:'Insulae pancreaticae',title:'Endocrine-architecture control versus PID and MPC, in silico',
- body:`<p><strong>Proposal. Not started.</strong></p>
+ body:`<p><strong>Proposal.</strong></p>
 <p>Closed-loop drug delivery usually uses a PID or MPC controller. The pancreas uses neither and implements biphasic release: a fast stored-vesicle pulse, then a slow synthesis-limited phase.</p>
 <p>Implement that architecture as a controller. Race it against PID and MPC on a validated glucose-insulin simulator.</p>`,
  facts:{Method:'In-silico control comparison',Testbed:'Validated glucose-insulin simulator',Target:'IEEE TBME'},
@@ -1058,7 +1058,7 @@ const WORK=[
 
 {col:7,row:7,cat:'paper',id:'foveate',gloss:'A lot to take in',mark:'radial',stage:'Proposal',unbuilt:1,
  taxon:'Fovea centralis',title:'Saccadic attention against uniform patching on whole-slide pathology',
- body:`<p><strong>Proposal. Not started.</strong></p>
+ body:`<p><strong>Proposal.</strong></p>
 <p>A pathology slide is a gigapixel image. Vision transformers patch it uniformly, which no eye has ever done. Foveation plus saccades matches the actual information geometry of the image.</p>
 <p>Implement a learned saccade policy - existing literature (SaccadeNet) only compares for processing speed/efficiency. Compare accuracy per unit compute against uniform patching.</p>`,
  facts:{Method:'Architecture comparison',Data:'Public whole-slide cohorts',Target:'MICCAI / MIDL'},
@@ -1074,7 +1074,7 @@ const WORK=[
 
 {col:8,row:4,cat:'concept',id:'natural-intelligence',gloss:'An installation that answers a stranger\u2019s challenge with an organism',mark:'mural',stage:'Idea',unbuilt:1,
  taxon:'Natural Intelligence',title:'A biomimicry art and science installation',
- body:`<p><strong>Not built, still in ideation phase.</strong></p>
+ body:`<p><strong>Ideation & planning.</strong></p>
 <p>Three elements to make the argument that nature has already solved most problems you wish to explore.</p>
 <p>A mural rendered half in technical drawing language and half in biological illustration, bleeding together at the centre so that a Voronoi diagram becomes a giraffe's coat, a tensegrity wireframe becomes a cytoskeleton, and a branching optimisation network becomes a lung. A tactile decision tree that walks a visitor through biomimicry logic, handing out an interlocking 3D-printed piece at each node so the path assembles into a small sculpture they keep, with the tree traversable backwards from an organism's trait to a problem it could solve or vice versa. And a problem wall where visitors post real problems for other people to pull and run through the tree, filling up over the run and becoming its own data visualisation.</p>
 <p>Designed to be complete in thirty seconds or thirty minutes. Success would be measured by interaction count, the disciplinary spread of problems deposited, and a QR-tracked count of sculptures that leave with someone.</p>`,
@@ -1083,7 +1083,7 @@ const WORK=[
 
 {col:13,row:8,cat:'note',id:'hrv-agreement',gloss:'The heart wants what it wants',mark:'pulse',stage:'Note',unbuilt:1,
  taxon:'Homo sapiens',title:'Do standard HRV toolkits agree on the same photoplethysmogram?',
- body:`<p><strong>Not started.</strong></p>
+ body:`<p><strong>Note.</strong></p>
 <p>Feed identical PPG into NeuroKit2, HeartPy, pyHRV and a hand-rolled implementation. Compare SDNN, RMSSD, pNN50. They frequently disagree, which invalidates cross-study comparison across a very large wearable literature.</p>
 <p>Cheap to run + de-risks the feature pipeline many things depend on.</p>`,
  facts:{Method:'Reproducibility audit',Data:'WESAD, PPG-DaLiA',Output:'Note and library patch',Target:'JOSS'},
@@ -1091,7 +1091,7 @@ const WORK=[
 
 {col:10,row:2,cat:'note',id:'plddt-cliff',gloss:'Confidence falls off a cliff somewhere',mark:'fiddle',stage:'Note',unbuilt:1,
  taxon:'Bombyx mori',title:'Where in protein function space does predicted confidence collapse?',
- body:`<p><strong>Not started.</strong></p>
+ body:`<p><strong>Note.</strong></p>
 <p>One question, one figure: plot pLDDT distributions across functional classes in the AlphaFold database and find the cliff edge. Structural and materials proteins are the hypothesis.</p>
 <p>Pilot for the silk benchmark.</p>`,
  facts:{Method:'Descriptive',Data:'AFDB, UniProt',Output:'Single-figure note',Target:'bioRxiv'},
@@ -1099,21 +1099,21 @@ const WORK=[
 
 {col:14,row:7,cat:'note',id:'bio-analogy-eval',gloss:'Can a model find the right organism?',mark:'pair',stage:'Note',unbuilt:1,
  taxon:'Corpus AskNature',title:'Benchmarking function-to-biology analogical retrieval',
- body:`<p><strong>Not started.</strong></p>
+ body:`<p><strong>Note.</strong></p>
 <p>The core move in bio-inspired design is abstracting a problem into a biological function, then retrieving organisms that solve it. Score frontier models against a curated ground truth.</p>`,
  facts:{Method:'Retrieval benchmark',Data:'Curated function-organism pairs',Output:'Note and eval harness',Target:'Workshop paper'},
  links:[]},
 
 {col:11,row:9,cat:'note',id:'ashby-nature',gloss:'Bio vs engineering',mark:'nautilus',stage:'Note',unbuilt:1,
  taxon:'Sequoia sempervirens',title:'Material property maps, biological against engineered',
- body:`<p><strong>Not started.</strong></p>
+ body:`<p><strong>Note.</strong></p>
 <p>Refresh the classic property-space maps with modern data. Biology wins on toughness per density and loses badly on stiffness and temperature. Knowing the shape of that envelope is what makes a scoping decision defensible.</p>`,
  facts:{Method:'Data synthesis',Output:'Figure set and open dataset',Use:'Scoping tool for everything here',Target:'bioRxiv'},
  links:[]},
 
 {col:14,row:9,cat:'note',id:'murray',gloss:'Old law, new problems',mark:'vascular',stage:'Note',unbuilt:1,
  taxon:'Quercus rubra',title:"Murray's law branching against conventional scaffold geometry",
- body:`<p><strong>Not started.</strong></p>
+ body:`<p><strong>Note.</strong></p>
 <p>Vascular systems minimise pumping work through a fixed radius-cubed branching relation. Tissue scaffolds and microfluidics are usually laid out by convention instead. Simulate both.</p>`,
  facts:{Method:'CFD comparison',Tools:'FEniCS / OpenFOAM',Output:'Note and geometry library',Target:'bioRxiv'},
  links:[]},
