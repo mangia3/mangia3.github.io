@@ -238,6 +238,9 @@ body.rect .nt .print{inset:26% 26% 34%}
 
 /* ═══ HEX MODE: a hive. no outlines — brightness, halo and shadow carry it ══ */
 body.hex .tf{clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)}
+body.hex .wall-bg{pointer-events:none}
+/* The plaque glaze stays textured, but must occlude the substrate beneath it. */
+body.hex .plaque .tf{background-color:#171309}
 body.hex .hexrim{display:none}
 body.hex .mark{top:21%;left:50%;transform:translateX(-50%)}
 body.hex .stage{top:12%;left:50%;transform:translateX(-50%)}
@@ -265,6 +268,7 @@ body.hex .live.sat .mark{top:23%;width:25px;height:25px}
 body.hex .live .pgloss{display:-webkit-box;-webkit-box-orient:vertical;
   -webkit-line-clamp:2;line-clamp:2;overflow:hidden}
 body.hex .live.xl .pgloss,body.hex .live.xlp .pgloss,body.hex .live.lg .pgloss{-webkit-line-clamp:3;line-clamp:3}
+body.hex [data-id="4sight-v2"] .pgloss{font-size:7px;letter-spacing:.04em;line-height:1.35}
 /* notes: barely larger than a background cell, but lit */
 body.hex .nt .mark{width:22px;height:22px;top:19%}
 body.hex .nt .plate{bottom:20%;left:4%;right:4%;padding:4px 3px 9px}
@@ -841,12 +845,12 @@ const WORK=[
 
 {col:0,row:1,cat:'plaqueSat',id:'contact',gloss:'Get in touch',mark:'contact',stage:'Reach',
  taxon:'Correspondence',title:'Open to collaboration, and especially to a good debate',
- body:`<p>The useful conversations right now: faculty sponsorship for human-subjects work, collaborators on evidence synthesis, and anyone who wants to make the case that bio-inspired design does or does not actually work.</p>`,
+ body:`<p>The useful conversations right now: collaborators on computing and evidence synthesis, health wearables and hardware projects, and anyone who wants to make the case that bio-inspired design does or does not actually work.</p>`,
  facts:{Institution:'Georgia Institute of Technology',Interests:'Bio-inspired design, biosignals, AI/ML in medicine'},
  links:[['Email: mayaangia@gmail.com','mailto:mayaangia@gmail.com',0],['LinkedIn','https://www.linkedin.com/in/maya-angia/',0]]},
 
 /* ── built projects ────────────────────────────────────────────── */
-{col:7,row:7,cat:'project',id:'4sight',gloss:'The wearable that predicts and prevents bad decisions',mark:'network',stage:'Project',
+{col:5,row:1,cat:'project',tier:'xlp',id:'4sight',gloss:'The wearable that predicts and prevents bad decisions',mark:'network',stage:'Project',
  taxon:'TreeHacks 2026 · Track Winner',title:'Biometric and visual monitoring with autonomous intervention',
  body:`<p>A Bangle.js 2 smartwatch running custom firmware streams raw photoplethysmography at 25 Hz and accelerometry at 12.5 Hz over Bluetooth in sixty-second windows. On device, a TypeScript XGBoost engine extracts 36 features per window (time-domain HRV, Poincaré measures, motion energy) and runs nine models: five risk classifiers covering stress, sleep, health, cognitive fatigue and physical exertion, plus four regressors for overall susceptibility and time to risk. Training used roughly 70,000 instances drawn from the WESAD and PPG-DaLiA datasets.</p>
 <p>Meta Ray-Ban glasses supply environmental context, streaming frames to a Gemma 3 4B vision-language model on Modal for activity, object, and food captioning. A Cloudflare Worker cron fuses biometric features and captions every sixty seconds and decides whether to act: throttling apps through Screen Time, sending a nudge over text with Poke, or even ordering melatonin or self-help books on Amazon. No user interaction is required anywhere in the loop.</p>
@@ -854,7 +858,7 @@ const WORK=[
  facts:{Role:'ML pipeline, biosignal features, system design',Stack:'Bangle.js 2 · React Native · XGBoost · Cloudflare Workers/D1 · Modal',Award:'Cloudflare track, 2nd place, TreeHacks 2026',Team:'Four people, thirty-six hours'},
  links:[['Devpost','https://devpost.com/software/4sight-neoslb',0],['GitHub','https://github.com/kl527/4sight',0],['Demo video','https://vimeo.com/1165159968',0],['TreeHacks 2026','https://treehacks-2026.devpost.com/',0]]},
 
-{col:5,row:2,cat:'project',id:'medgraph',gloss:'Secure, proximity-contextualized learning across hospitals',mark:'network',stage:'Project',
+{col:4,row:3,cat:'project',tier:'md',id:'medgraph',gloss:'Secure, proximity-contextualized learning across hospitals',mark:'network',stage:'Project',
  taxon:'HooHacks 2025 · Track Winner',title:'Federated graph learning over electronic health record networks',
  body:`<p>Hospitals cannot and should not pool patients' electronic health records (EHR), which makes the most valuable clinical datasets structurally unavailable. This also means any predictions on individual hospitals lose out on proximity context - spread of diseases, locallized condition/disorder rates, environmental effects, etc... MedGraph builds a graph per patient in which nodes are clinical encounters carrying observation feature vectors, and edges encode both temporal ordering between encounters and overlap between conditions and medications. A graph attention network trained with attention concentrated on condition START and END edges predicts which conditions emerge or resolve at the next visit.</p>
 <p>Then, training is federated. Each institution fits locally and shares only encrypted model updates with an aggregation server, so the model travels and the records do not. Weight aggregation allows for multi-hospital context for more robust predictions without increasing security risk. Synthea-generated synthetic cohorts stood in for real data as a proof of concept.</p>
@@ -963,7 +967,7 @@ const WORK=[
  links:[['Report (PDF)','docs/Angia-2026-Femoral-Surrogate-Composite-Design.pdf',0]]},
 
 /* ── proposals and ideas──────────────────────────── */
-{col:8,row:2,cat:'bigpaper',id:'allostasis',gloss:'Auditing 4sight prediction validity',mark:'heart',stage:'Proposal',unbuilt:1,
+{col:9,row:2,cat:'bigpaper',id:'allostasis',gloss:'Auditing 4sight prediction validity',mark:'heart',stage:'Proposal',unbuilt:1,
  taxon:'Nervus vagus',title:'A construct-validity audit of consumer readiness scores',
  body:`<p><strong>Proposal.</strong></p>
 <p>4sight reads heart-rate variability (among other biosignals) off a hacked smartwatch and predicts windows of impaired judgment. It won a track at TreeHacks, but also has a hole in the prediction logic, which we acknowledged: there is no labelled dataset for impaired decision-making specifically, so the model was trained on stress proxies instead.</p>
@@ -972,7 +976,7 @@ const WORK=[
  facts:{Method:'Reproducibility and construct validity audit',Inspiration:'4sight',Standard:'TRIPOD+AI · DiMe V3+'}, //,Target:'CHIL / IEEE JBHI'
  links:[['4sight on Devpost','https://devpost.com/software/4sight-neoslb',0],['Source code','https://github.com/kl527/4sight',0]]},
 
-{col:9,row:0,cat:'bigpaper',id:'spidroin',gloss:'Where the fold models fail at silk',mark:'silk',stage:'Proposal',unbuilt:1,
+{col:10,row:0,cat:'bigpaper',id:'spidroin',gloss:'Where the fold models fail at silk',mark:'silk',stage:'Proposal',unbuilt:1,
  taxon:'Araneus diadematus',title:'A benchmark for the proteins biomimetic materials science actually needs',
  body:`<p><strong>Proposal.</strong></p>
 <p>Spider silk. Mussel glue. Antifreeze. Squid ring teeth. Nature's best materials run on proteins that are repetitive, disordered, hierarchically assembled, and dependent on chemical modifications the structure-prediction models cannot even represent.</p>
@@ -981,7 +985,7 @@ const WORK=[
  facts:{Method:'Benchmark and adversarial evaluation',Models:'AF3, Boltz-2, Chai-1, Protenix, ESMFold',Scale:'~400 sequences × 5 seeds × 6 models'}, //,Target:'NeurIPS Datasets & Benchmarks'
  links:[]},
 
-{col:13,row:0,cat:'bigpaper',id:'counterfactual',gloss:'Does biomimicry actually work?',mark:'fork',stage:'Proposal',unbuilt:1,
+{col:14,row:0,cat:'bigpaper',id:'counterfactual',gloss:'Does biomimicry actually work?',mark:'fork',stage:'Proposal',unbuilt:1,
  taxon:'Papilio glaucus',title:'A matched-comparison synthesis of realized bio-inspired designs',
  body:`<p><strong>Proposal.</strong></p>
 <p>The field I want to build a career in cannot answer its own central question. Its evidence base is case studies with no counterfactual, plus small studies rating whether students generated more out-of-the-box concepts. Unique concepts do not always make better engineering.</p>
@@ -990,7 +994,7 @@ const WORK=[
  facts:{Method:'Systematic review and meta-analysis',Standard:'PRISMA 2020',Output:'Effect-size atlas and open database'}, //,Target:'Bioinspiration & Biomimetics'
  links:[]},
 
-{col:13,row:4,cat:'bigpaper',id:'profiling',gloss:'Profile pictures and perception',mark:'eye',stage:'Proposal',unbuilt:1,
+{col:14,row:4,cat:'bigpaper',id:'profiling',gloss:'Profile pictures and perception',mark:'eye',stage:'Proposal',unbuilt:1,
  taxon:'Instagram spp.',title:'Effect of aesthetic response on perception of personality',
  body:`<p><strong>Early idea. Barely designed thought experiment.</strong></p>
 <p>Do the characteristics of a profile picture change how people percieve me?</p>
@@ -999,7 +1003,7 @@ const WORK=[
  facts:{Status:'Early idea, design not worked out',Question:'Does image style change how a person is read?',Obstacle:'Self-chosen images, so no randomisation',Expectation:'Null at any detectable effect size'},
  links:[['Profile picture archive','/gallery.html',0]]},
 
-{col:11,row:1,cat:'paper',id:'ice-binding',gloss:'Nature&rsquo;s antifreeze',mark:'frost',stage:'Proposal',unbuilt:1,
+{col:12,row:1,cat:'paper',id:'ice-binding',gloss:'Nature&rsquo;s antifreeze',mark:'frost',stage:'Proposal',unbuilt:1,
  taxon:'Dissostichus mawsoni',title:'Ice-binding protein evaluation and a cryopreservation design proposal',
  body:`<p><strong>Proposal.</strong></p>
 <p>Antifreeze proteins bind specific ice crystal planes and stop recrystallisation. Organ cryopreservation needs exactly that. Whether current models can fold them well enough to design new ones is untested.</p>
@@ -1007,7 +1011,7 @@ const WORK=[
  facts:{Method:'Targeted evaluation and design proposal',Tools:'Boltz-2, ProteinMPNN, RFdiffusion',Application:'Organ and cell cryopreservation'}, //,Target:'Bioinspiration & Biomimetics'
  links:[]},
 
-{col:14,row:2,cat:'paper',id:'translation',gloss:'The bio-inspired designs that failed',mark:'seed',stage:'Proposal',unbuilt:1,
+{col:15,row:2,cat:'paper',id:'translation',gloss:'The bio-inspired designs that failed',mark:'seed',stage:'Proposal',unbuilt:1,
  taxon:'Taraxacum officinale',title:'A taxonomy of why bio-inspired designs do not translate',
  body:`<p><strong>Proposal.</strong></p>
 <p>The literature is a survivorship-biased record of wins. The knowledge is in the losses: scale mismatch, manufacturing non-transferability, lost property gradients, multifunctionality collapse, and the most common failure of all for bio-inspired design, copying the form instead of the function.</p>
@@ -1015,7 +1019,7 @@ const WORK=[
  facts:{Method:'Case-history coding',Sample:'60–100 translation attempts',Output:'Taxonomy and practitioner checklist'}, //,Target:'Design Studies'
  links:[]},
 
-{col:11,row:3,cat:'paper',id:'stigmergy',gloss:'Coordination without MS Teams',mark:'trail',stage:'Proposal',unbuilt:1,
+{col:12,row:3,cat:'paper',id:'stigmergy',gloss:'Coordination without MS Teams',mark:'trail',stage:'Proposal',unbuilt:1,
  taxon:'Atta cephalotes',title:'Pheromone-trail topology against FedAvg on non-IID clinical data',
  body:`<p><strong>Proposal.</strong></p>
 <p>Federated learning across hospitals assumes a star topology and a coordinating server. Ant colonies coordinate with no central node and a decaying local signal. This maps surprisingly well onto what a privacy-constrained hospital network can and should support.</p>
@@ -1056,21 +1060,21 @@ const WORK=[
  facts:{Method:'In-silico control comparison',Testbed:'Validated glucose-insulin simulator'}, //,Target:'IEEE TBME'
  links:[]},
 
-{col:3,row:1,cat:'paper',id:'foveate',gloss:'Compute-efficient pathology',mark:'radial',stage:'In progress',
+{col:3,row:1,cat:'paper',tier:'xlp',id:'foveate',gloss:'Compute-efficient pathology',mark:'radial',stage:'In progress',
  taxon:'Fovea centralis',title:'Foveated sampling for whole-slide pathology',
  body:`<p>Can eye-inspired sampling improve slide-classification accuracy per unit compute? The current pipeline supports tissue-aware uniform sampling, cached Virchow2 embeddings, and reproducible baseline evaluation on CAMELYON16.</p>
 <p>Resumable GPU extraction and cloud launchers are in place. Large-scale validation and the learned saccade policy are next.</p>`,
  facts:{Status:'In progress · uniform baseline implemented',Method:'Frozen Virchow2, mean pooling, linear classification',Data:'CAMELYON16',Evaluation:'Held-out training-cohort split, patch budgets, compute accounting'},
  links:[['GitHub','https://github.com/mangia3/foveate',0]]},
 
-{col:5,row:0,cat:'paper',id:'4sight-v2',gloss:'Wearable early warning',mark:'network',stage:'In progress',
+{col:6,row:1,cat:'paper',id:'4sight-v2',gloss:'Wearable physiological state modeling',mark:'network',stage:'In progress',
  taxon:'4sight v2',title:'Modeling physiological state from wearable signals',
  body:`<p>A research follow-up to the TreeHacks prototype, studying whether wearable signals can provide early warning of physiological stress across people and with limited personal data.</p>
 <p>The proposal and experimental design are complete; implementation and experiments are next. Planned studies compare temporal models, personalization, missing-sensor robustness, and accuracy versus compute.</p>`,
  facts:{Status:'In progress · research design; no v2 results yet',Data:'WESAD stress labels; PPG-DaLiA heart-rate estimation',Method:'Planned feature baselines and compact temporal models',Evaluation:'Subject-held-out splits, sensor ablations, resource profiling'},
  links:[['GitHub','https://github.com/mangia3/4sightV2',0]]},
 
-{col:7,row:0,cat:'paper',id:'period-futures',gloss:'Speculative design on a public health gap',mark:'cycle',stage:'Proposal',
+{col:8,row:0,cat:'paper',id:'period-futures',gloss:'Speculative design on a public health gap',mark:'cycle',stage:'Proposal',
  taxon:'Period Futures',title:'Investigating critical gaps in the menstrual health space',
  body:`<p><strong>Complete, with publication in preparation.</strong> This initiative was part of Period Futures, under Wish4WASH and Engineers Without Borders.</p>
 <p>Eight semi-structured interviews with purposefully sampled stakeholders (entrepreneurs, educators, a sociologist, a product designer, a public health researcher, a rural activist), analyzed with grounded theory into fourteen themes and consolidated into four insight statements across educational stigma, media representation, inclusivity and product regulation. Each insight was then reframed into a design opportunity according to speculative design strategies: deliverables are provocations rather than recommendations.</p>
@@ -1078,7 +1082,7 @@ const WORK=[
  facts:{Method:'Human-centered and speculative design',Analysis:'Grounded theory, 14 themes to 4 insight statements',Sample:'Eight semi-structured interviews',Status:'Publication in preparation'},
  links:[['Paper (PDF)','docs/Yellanki-Angia-etal-2026-Menstrual-Health-Speculative-Design.pdf',0]]},
 
-{col:8,row:4,cat:'concept',id:'natural-intelligence',gloss:'An installation that answers a stranger\u2019s challenge with an organism',mark:'mural',stage:'Idea',unbuilt:1,
+{col:9,row:4,cat:'concept',id:'natural-intelligence',gloss:'An installation that answers a stranger\u2019s challenge with an organism',mark:'mural',stage:'Idea',unbuilt:1,
  taxon:'Natural Intelligence',title:'A biomimicry art and science installation',
  body:`<p><strong>Ideation & planning.</strong></p>
 <p>Three elements to make the argument that nature has already solved most problems you wish to explore.</p>
@@ -1095,7 +1099,7 @@ const WORK=[
  facts:{Method:'Reproducibility audit',Data:'WESAD, PPG-DaLiA',Output:'Note and library patch'}, //,Target:'JOSS'
  links:[]},
 
-{col:10,row:2,cat:'note',id:'plddt-cliff',gloss:'Confidence falls off a cliff somewhere',mark:'fiddle',stage:'Note',unbuilt:1,
+{col:11,row:2,cat:'note',id:'plddt-cliff',gloss:'Confidence falls off a cliff somewhere',mark:'fiddle',stage:'Note',unbuilt:1,
  taxon:'Bombyx mori',title:'Where in protein function space does predicted confidence collapse?',
  body:`<p><strong>Note.</strong></p>
 <p>One question, one figure: plot pLDDT distributions across functional classes in the AlphaFold database and find the cliff edge. Structural and materials proteins are the hypothesis.</p>
@@ -1131,7 +1135,7 @@ const WORK=[
 const MODE='hex';
 document.body.className=MODE;
 
-const COLS=15,ROWS=10;   // tight enough that lit work is never more than 2 cells away
+const COLS=16,ROWS=10;
 const TW=150,TH=124,TG=7;                         // rect cell
 const HR=86,HW=Math.sqrt(3)*HR,HVS=1.5*HR;       // hex cell
 
@@ -1142,15 +1146,21 @@ const TIER={project:'xl',bigpaper:'lg',paper:'md',lab:'md',note:'nt',plaqueBig:'
 /* Two hexes of radius Ra,Rb on adjacent cells meet edge-to-edge when
    Ra+Rb = 2. So the size ladder is bounded, and MORTAR is the visible seam. */
 const MORTAR=0.05;
+const BG_RADIUS=0.945;
+const CAVITY_RADIUS=(2-MORTAR)/2; // Keep existing soil lines and plant anchors.
+const BG_OVERLAP_LIMIT=0.20, BG_LIVE_MARGIN=2; // Area fraction; margin in pixels.
 /* xlp 1.28 + sat 0.67 = 1.95, so contact exactly touches about while being
    noticeably larger than a bare satellite would allow at xl 1.40 */
 const HEXR={xl:1.40,xlp:1.28,lg:1.24,md:.98,nt:1.06,sat:.67,dec:.98,
             hub:1.05,sub:.89,tuck:.66,trio:.975,tri:1.04,tris:.90};
-/* Fine positioning tweaks for specific hero tiles in hex mode.
-  Keeps the About-contact-media cluster touching without overlap. */
+/* Fine positioning tweaks for related tiles in hex mode. */
 const HEX_OFFSET={
   contact:{x:-33,y:19},
-  media:{x:-38,y:19}
+  media:{x:-38,y:19},
+  'biomech-femur':{x:0,y:-2*HVS},
+  '4sight':{x:60-HW/2,y:0},
+  // Keep the full-size v2 tile against 4sight with the normal mortar seam.
+  '4sight-v2':{x:60-HW/2+HW*((HEXR.xlp+HEXR.md+MORTAR)/2-1),y:0}
 };
 const DEPTH={xl:40,xlp:36,lg:30,md:18,nt:20,sat:26,hub:28,sub:20,tuck:24,trio:26,tri:30,tris:24};
 const KIND={project:'Built project',bigpaper:'Paper',paper:'Paper / experiment',
@@ -1178,15 +1188,54 @@ const hexNeighbours=(c,r)=> r%2
   ? [[c-1,r],[c+1,r],[c,r-1],[c+1,r-1],[c,r+1],[c+1,r+1]]
   : [[c-1,r],[c+1,r],[c-1,r-1],[c,r-1],[c-1,r+1],[c,r+1]];
 
+// Build-time polygon clipping only; nothing is recalculated while panning.
+function hexPolygon(cx,cy,r){
+  const a=Math.sqrt(3)*r/2;
+  return [[cx,cy-r],[cx+a,cy-r/2],[cx+a,cy+r/2],
+          [cx,cy+r],[cx-a,cy+r/2],[cx-a,cy-r/2]];
+}
+const edgeSide=(a,b,p)=>(b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0]);
+const insideHex=(p,hex)=>hex.every((a,i)=>edgeSide(a,hex[(i+1)%6],p)>=0);
+function polygonArea(poly){
+  return Math.abs(poly.reduce((s,p,i)=>{
+    const q=poly[(i+1)%poly.length];return s+p[0]*q[1]-q[0]*p[1];
+  },0))/2;
+}
+function clippedArea(subject,clip){
+  let poly=subject;
+  for(let i=0;i<clip.length&&poly.length;i++){
+    const a=clip[i],b=clip[(i+1)%clip.length],out=[];
+    let prev=poly[poly.length-1],ps=edgeSide(a,b,prev);
+    for(const p of poly){
+      const s=edgeSide(a,b,p);
+      if((s>=0)!==(ps>=0)){
+        const t=ps/(ps-s);
+        out.push([prev[0]+t*(p[0]-prev[0]),prev[1]+t*(p[1]-prev[1])]);
+      }
+      if(s>=0)out.push(p);
+      prev=p;ps=s;
+    }
+    poly=out;
+  }
+  return polygonArea(poly);
+}
+const liveCullHexes=MODE==='hex'?WORK.map(w=>{
+  const p=hexCentre(w.col,w.row),o=HEX_OFFSET[w.id]||{x:0,y:0};
+  return hexPolygon(p.cx+o.x,p.cy+o.y,HR*HEXR[w.tier||TIER[w.cat]]+BG_LIVE_MARGIN);
+}):[];
+function cullBackground(c,r){
+  const {cx,cy}=hexCentre(c,r),hex=hexPolygon(cx,cy,HR*BG_RADIUS),area=polygonArea(hex);
+  return liveCullHexes.some(live=>insideHex([cx,cy],live)||clippedArea(hex,live)/area>=BG_OVERLAP_LIMIT);
+}
+
 const wallEl=document.getElementById('wall'),worldEl=document.getElementById('world'),
       floraEl=document.getElementById('flora'),vpEl=document.getElementById('viewport');
 
 /* ── occupancy ─────────────────────────────────────────────────────
-   Rect mode reserves the span. Hex mode reserves nothing: instead every
-   cell is given the largest radius that still clears its neighbours, so
-   the lattice grades down around the big cells and no cell is ever empty.
+   Rect mode reserves spans. Hex mode records semantic cells for cavity
+   selection; the regular substrate continues behind foreground specimens.
    ────────────────────────────────────────────────────────────────── */
-const occ=new Set(), warn=[], cellR={};
+const occ=new Set(), warn=[];
 if(MODE==='rect'){
   WORK.forEach(w=>{
     const [sc,sr]=SPAN[w.cat];
@@ -1197,21 +1246,20 @@ if(MODE==='rect'){
     }
   });
 }else{
-  WORK.forEach(w=>{ cellR[w.col+','+w.row]=HEXR[TIER[w.cat]]; occ.add(w.col+','+w.row); });
+  WORK.forEach(w=>{
+    occ.add(w.col+','+w.row);
+  });
   WORK.forEach(w=>hexNeighbours(w.col,w.row).forEach(([c,r])=>{
     const o=WORK.find(x=>x.col===c&&x.row===r); if(!o)return;
-    const sum=HEXR[TIER[w.cat]]+HEXR[TIER[o.cat]];
-    if(sum>2-MORTAR) warn.push(`${w.id}+${o.id} adjacent, combined ${sum.toFixed(2)} > ${(2-MORTAR).toFixed(2)}`);
+    const sum=HEXR[w.tier||TIER[w.cat]]+HEXR[o.tier||TIER[o.cat]];
+    const a=hexCentre(w.col,w.row), b=hexCentre(o.col,o.row);
+    const ao=HEX_OFFSET[w.id]||{x:0,y:0}, bo=HEX_OFFSET[o.id]||{x:0,y:0};
+    const dx=Math.abs(a.cx+ao.x-b.cx-bo.x), dy=Math.abs(a.cy+ao.y-b.cy-bo.y);
+    // Test the actual hexagon edges after offsets, including unequal sizes.
+    const clearance=Math.sqrt(3)*HR*sum/2;
+    if(dx<clearance-0.01 && dx/2+Math.sqrt(3)*dy/2<clearance-0.01)
+      warn.push(`${w.id}+${o.id} overlap`);
   }));
-  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
-    const k=c+','+r; if(cellR[k]!==undefined)continue;
-    let rad=HEXR.dec;
-    hexNeighbours(c,r).forEach(([nc,nr])=>{
-      const nv=cellR[nc+','+nr];
-      rad=Math.min(rad, 2-MORTAR-(nv!==undefined?nv:HEXR.dec));
-    });
-    cellR[k]=Math.max(0.34,rad);
-  }
 }
 const SHADOW=[],LIVE=[],GAPS=[];
 /* Cells touching a heavy cell are more likely to have fallen out: the big
@@ -1219,7 +1267,7 @@ const SHADOW=[],LIVE=[],GAPS=[];
    spill from right where the important work is. */
 const NEARBIG=new Set();
 WORK.forEach(w=>{
-  const t=TIER[w.cat]; if(t!=='xl'&&t!=='lg')return;
+  const t=w.tier||TIER[w.cat]; if(t!=='xl'&&t!=='xlp'&&t!=='lg')return;
   if(MODE==='hex') hexNeighbours(w.col,w.row).forEach(([c,r])=>NEARBIG.add(c+','+r));
   else{const[sc,sr]=SPAN[w.cat];
     for(let r=w.row-1;r<=w.row+sr;r++)for(let c=w.col-1;c<=w.col+sc;c++)NEARBIG.add(c+','+r);}
@@ -1278,13 +1326,20 @@ function mkTile(box,cls,tier,html){
   t.innerHTML=`<div class="tf">${html}</div>`+
     (MODE==='hex'?`<svg class="hexrim" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="${HEXPTS}"/></svg>`:'');
   WALL_W=Math.max(WALL_W,box.x+box.w); WALL_H=Math.max(WALL_H,box.y+box.h);
-  wallEl.appendChild(t);
+  if(MODE==='hex'&&!t.classList.contains('live')){
+    t.classList.add('wall-bg');
+    // Exact lattice geometry avoids rounding different rows into uneven seams.
+    t.style.left=box.x+'px';t.style.top=box.y+'px';
+    t.style.width=box.w+'px';t.style.height=box.h+'px';
+    // Keep the substrate first in paint order, at z=0. All WORK depths stay intact.
+    wallEl.insertBefore(t,wallEl.querySelector('.live'));
+  }else wallEl.appendChild(t);
   return t;
 }
 
 /* ── the work ─────────────────────────────────────────────────── */
 WORK.forEach(w=>{
-  const tier=TIER[w.cat];
+  const tier=w.tier||TIER[w.cat];
   const box=boxFor({col:w.col,row:w.row,span:SPAN[w.cat]},tier);
   if(MODE==='hex' && HEX_OFFSET[w.id]){
     box.x += HEX_OFFSET[w.id].x;
@@ -1309,7 +1364,9 @@ WORK.forEach(w=>{
   sh.style.filter=`blur(${((d*1.2+9)/2).toFixed(1)}px)`;   // drop-shadow radius r ≡ blur(r/2)
   t.insertBefore(sh,t.firstChild);
   SHADOW.push({el:t,sh,depth:d});
-  LIVE.push({x:box.x,y:box.y,w:box.w,h:box.h});
+  // Moving the femur plaque must not reseed or relocate the existing plants.
+  const plantY=box.y+(MODE==='hex'&&w.id==='biomech-femur'?2*HVS:0);
+  LIVE.push({x:box.x,y:plantY,w:box.w,h:box.h});
 });
 
 /* ── where the wall has failed ─────────────────────────────────────
@@ -1344,13 +1401,19 @@ const GAPCELLS=(function(){
   return out;
 })();
 
-/* ── decoration fills every remaining cell ────────────────────── */
+/* ── regular substrate, with intentional cavities ────────────── */
 for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
-  if(occ.has(c+','+r))continue;
-  const radius = MODE==='hex'?cellR[c+','+r]:undefined;
+  if(MODE==='rect'&&occ.has(c+','+r))continue;
+  const cavity=GAPCELLS.has(c+','+r);
+  const radius = MODE==='hex'?(cavity?CAVITY_RADIUS:BG_RADIUS):undefined;
   const box=boxFor({col:c,row:r,span:[1,1],radius},'dec');
+  if(MODE==='hex'){
+    // Retain the wall's existing pan bounds even when edge fillers are culled.
+    const slot=boxFor({col:c,row:r,radius:CAVITY_RADIUS},'dec');
+    WALL_W=Math.max(WALL_W,slot.x+slot.w);WALL_H=Math.max(WALL_H,slot.y+slot.h);
+  }
   const roll=rnd();
-  if(GAPCELLS.has(c+','+r)){
+  if(cavity){
     mkTile(box,'gap',null,'<div class="inner"></div>'+substrate(box.w,box.h));
     GAPS.push({cx:box.x+box.w/2, x:box.x, y:box.y, w:box.w, h:box.h,
                soilY:box.y+box.h*SOIL_TOP,          // exact surface to plant on
@@ -1370,14 +1433,19 @@ for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
     extra+=`<div class="rivet" style="left:${rr(5,Math.max(7,box.w-8)).toFixed(0)}px;top:${rr(5,Math.max(7,box.h-8)).toFixed(0)}px"></div>`;
   const m=rnd();
   const mat = m<0.16?'rst' : m<0.44?'mtl' : 'con';
-  const t=mkTile(box,mat,null,`<div class="print">${makePrint()}</div>`+extra);
+  // Consume the same seeded artwork choices even for omitted fillers. This
+  // preserves all subsequent cavity artwork, plant species, and plant anchors.
+  const print=makePrint();
+  if(MODE==='hex'&&cullBackground(c,r))continue;
+  const t=mkTile(box,mat,null,`<div class="print">${print}</div>`+extra);
   /* Every translateZ inside a preserve-3d context is a layer the compositor
      must sort and rasterise, so relief is rationed: about a quarter of the
      background is raised rather than half, and the shallowest tier is gone
      because its shadow was never visible anyway. */
   let d=0;
   if(roll<0.13)d=13; else if(roll<0.26)d=8;
-  if(d){
+  // Hex substrate stays coplanar for consistent seams. Rect relief is unchanged.
+  if(d&&MODE==='rect'){
     t.style.transform=`translateZ(${d}px)`;
     /* background tiles get a fixed shadow set once — only the living tiles
        are re-lit every frame, which is what keeps the pan responsive */
