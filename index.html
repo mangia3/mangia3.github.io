@@ -846,7 +846,7 @@ const WORK=[
  links:[['Email: mayaangia@gmail.com','mailto:mayaangia@gmail.com',0],['LinkedIn','https://www.linkedin.com/in/maya-angia/',0]]},
 
 /* ── built projects ────────────────────────────────────────────── */
-{col:3,row:1,cat:'project',id:'4sight',gloss:'The wearable that predicts and prevents bad decisions',mark:'network',stage:'Project',
+{col:7,row:7,cat:'project',id:'4sight',gloss:'The wearable that predicts and prevents bad decisions',mark:'network',stage:'Project',
  taxon:'TreeHacks 2026 · Track Winner',title:'Biometric and visual monitoring with autonomous intervention',
  body:`<p>A Bangle.js 2 smartwatch running custom firmware streams raw photoplethysmography at 25 Hz and accelerometry at 12.5 Hz over Bluetooth in sixty-second windows. On device, a TypeScript XGBoost engine extracts 36 features per window (time-domain HRV, Poincaré measures, motion energy) and runs nine models: five risk classifiers covering stress, sleep, health, cognitive fatigue and physical exertion, plus four regressors for overall susceptibility and time to risk. Training used roughly 70,000 instances drawn from the WESAD and PPG-DaLiA datasets.</p>
 <p>Meta Ray-Ban glasses supply environmental context, streaming frames to a Gemma 3 4B vision-language model on Modal for activity, object, and food captioning. A Cloudflare Worker cron fuses biometric features and captions every sixty seconds and decides whether to act: throttling apps through Screen Time, sending a nudge over text with Poke, or even ordering melatonin or self-help books on Amazon. No user interaction is required anywhere in the loop.</p>
@@ -1056,13 +1056,19 @@ const WORK=[
  facts:{Method:'In-silico control comparison',Testbed:'Validated glucose-insulin simulator'}, //,Target:'IEEE TBME'
  links:[]},
 
-{col:7,row:7,cat:'paper',id:'foveate',gloss:'A lot to take in',mark:'radial',stage:'Proposal',unbuilt:1,
- taxon:'Fovea centralis',title:'Saccadic attention against uniform patching on whole-slide pathology',
- body:`<p><strong>Proposal.</strong></p>
-<p>A pathology slide is a gigapixel image. Vision transformers patch it uniformly, which no eye has ever done. Foveation plus saccades matches the actual information geometry of the image.</p>
-<p>Implement a learned saccade policy - existing literature (SaccadeNet) only compares for processing speed/efficiency. Compare accuracy per unit compute against uniform patching.</p>`,
- facts:{Method:'Architecture comparison',Data:'Public whole-slide cohorts'}, //,Target:'MICCAI / MIDL'
- links:[]},
+{col:3,row:1,cat:'paper',id:'foveate',gloss:'Compute-efficient pathology',mark:'radial',stage:'In progress',
+ taxon:'Fovea centralis',title:'Foveated sampling for whole-slide pathology',
+ body:`<p>Can eye-inspired sampling improve slide-classification accuracy per unit compute? The current pipeline supports tissue-aware uniform sampling, cached Virchow2 embeddings, and reproducible baseline evaluation on CAMELYON16.</p>
+<p>Resumable GPU extraction and cloud launchers are in place. Large-scale validation and the learned saccade policy are next.</p>`,
+ facts:{Status:'In progress · uniform baseline implemented',Method:'Frozen Virchow2, mean pooling, linear classification',Data:'CAMELYON16',Evaluation:'Held-out training-cohort split, patch budgets, compute accounting'},
+ links:[['GitHub','https://github.com/mangia3/foveate',0]]},
+
+{col:5,row:0,cat:'paper',id:'4sight-v2',gloss:'Wearable early warning',mark:'network',stage:'In progress',
+ taxon:'4sight v2',title:'Modeling physiological state from wearable signals',
+ body:`<p>A research follow-up to the TreeHacks prototype, studying whether wearable signals can provide early warning of physiological stress across people and with limited personal data.</p>
+<p>The proposal and experimental design are complete; implementation and experiments are next. Planned studies compare temporal models, personalization, missing-sensor robustness, and accuracy versus compute.</p>`,
+ facts:{Status:'In progress · research design; no v2 results yet',Data:'WESAD stress labels; PPG-DaLiA heart-rate estimation',Method:'Planned feature baselines and compact temporal models',Evaluation:'Subject-held-out splits, sensor ablations, resource profiling'},
+ links:[['GitHub','https://github.com/mangia3/4sightV2',0]]},
 
 {col:7,row:0,cat:'paper',id:'period-futures',gloss:'Speculative design on a public health gap',mark:'cycle',stage:'Proposal',
  taxon:'Period Futures',title:'Investigating critical gaps in the menstrual health space',
